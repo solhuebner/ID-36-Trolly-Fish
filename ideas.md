@@ -11,3 +11,5 @@
   * player gets 3 bubbles he can shoot to kill enemies
   * player is in a protective bubble (timer)
   * player get's continue 
+  * ?
+  * ?
