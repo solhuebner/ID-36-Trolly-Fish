@@ -1,3 +1,5 @@
+Trolly fish is like an endless runner, where you need to dodge enemies, collect stars and use powerups to progress as far as you can.
+
 * the main character is a fish drying to dodge ... aquatic stuff
 * thinking of 3 enemies
   * an eel swimming straight at a fixed speed
