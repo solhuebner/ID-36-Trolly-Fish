@@ -9,6 +9,8 @@
 
 extern Physics physics;
 extern unsigned int scorePlayer;
+extern byte eelMax;
+extern byte jellyMax;
 
 unsigned int spawnTimer = SPAWN_DELAY;
 
@@ -19,9 +21,19 @@ void spawnWave()
   if (spawnTimer == 0)
   {
     spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 3));
-    
+
+    if (scorePlayer > 20)
+      jellyMax = 2;
+    if (scorePlayer > 30)
+      eelMax = 2;
+    if (scorePlayer > 40)
+      jellyMax = 3;
+
+    if (scorePlayer > 10)
+      createEnemy(ENEMY_EEL);
+    if (scorePlayer > 5)
     createEnemy(ENEMY_JELLY);
-    createEnemy(ENEMY_EEL);
+    
     createEnemy(ENEMY_BAD);
   }
 }

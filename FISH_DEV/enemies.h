@@ -6,6 +6,9 @@
 #define MAX_ENEMIES             8
 #define GAME_LEFT               3
 
+#define GAME_TOP                3
+#define GAME_BOTTOM             54
+
 #define ENEMY_BAD               0
 #define ENEMY_JELLY             1
 #define ENEMY_EEL               2
@@ -245,8 +248,8 @@ PROGMEM const unsigned char eel_plus_mask[] = {
 };
 
 // Enemy Type variables
-byte numEels = 0;
-byte numJellys = 0;
+int8_t numEels = 0;
+int8_t numJellys = 0;
 byte jellyMax = 1;
 byte eelMax = 1;
 
@@ -276,6 +279,7 @@ void Enemies::resetPos()
 
    if (type == ENEMY_JELLY)
       --numJellys;
+      
    if (type == ENEMY_EEL)
       --numEels;
 
@@ -361,7 +365,7 @@ void updateEnemies()
             // Faster left movement when bursting
             enemyFish[i].x +=  enemyFish[i].xSpeed;
             
-            if (enemyFish[i].y <= 0)
+            if (enemyFish[i].y <= GAME_TOP)
               enemyFish[i].burst = 1;
               
             --enemyFish[i].burst;
@@ -370,9 +374,15 @@ void updateEnemies()
           {
             // Slower left movement not bursting
             enemyFish[i].x--;
+            
             // Decrement time before next burst
             --enemyFish[i].burstTimer;
+
+            // Drop y
             enemyFish[i].y -= enemyFish[i].ySpeed / 2;
+            if (enemyFish[i].y > GAME_BOTTOM - enemyFish[i].height)
+              enemyFish[i].burstTimer = 0;            // Reset timer when under screen
+              
             if (enemyFish[i].burstTimer == 0)
             {
               // Timer up, reset burst and burstTimer
