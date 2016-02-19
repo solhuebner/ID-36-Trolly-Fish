@@ -128,7 +128,7 @@ void loop() {
       checkInputs();
       spawnWave();
       updateStarFish();
-      updateEnemies();
+      if (arduboy.everyXFrames(3)) updateEnemies();
       checkIfScored();
       drawTrollyFish();
       drawEnemies();
@@ -137,6 +137,7 @@ void loop() {
       break;
     case STATE_GAME_OVER:
       //arduboy.drawSprite(0, 0, gameOver_bitmap, 128, 64, 0, WHITE);
+      drawScore(16,20,1);
       if (buttons.justPressed(A_BUTTON | B_BUTTON))
       {
         gameState = STATE_MENU_MAIN;

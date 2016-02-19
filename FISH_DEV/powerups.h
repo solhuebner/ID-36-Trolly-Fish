@@ -171,7 +171,7 @@ void checkIfScored() {
     Rect starFishPoint = {.x = starFish[i].x, .y = starFish[i].y, .width = starFish[i].width, starFish[i].height};
   
     if (physics.collide(starFishPoint, playerRect)) {
-      arduboy.tunes.tone(300, 200);
+      arduboy.tunes.tone(300, 20);
       scorePlayer++;
       starFish[i].resetPos();
     }
