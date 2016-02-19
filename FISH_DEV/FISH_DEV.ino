@@ -23,7 +23,6 @@
 #include "enemies.h"
 #include "stage.h"
 #include "powerups.h"
-#include "score.h"
 #include "inputs.h"
 
 //define menu states (on main menu)
@@ -132,6 +131,7 @@ void loop() {
       checkIfScored();
       drawTrollyFish();
       drawEnemies();
+      drawScore(64,0,0);
       if (checkGameOver())gameState = STATE_GAME_OVER;
       break;
     case STATE_GAME_OVER:
