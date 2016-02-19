@@ -8,7 +8,7 @@ extern Arduboy arduboy;
 #define MAX_STARS   8
 
 const byte SIN_Y[] = {
-  20, 32, 41, 48,
+  23, 32, 41, 48,
   54, 48, 41, 32,
 };
 
@@ -62,7 +62,7 @@ void initStarFish()
   for (byte i = 0; i < MAX_STARS; ++i)
   {
     starFish[i].x = 120 + (128 / MAX_STARS * i);
-    starFish[i].y = SIN_Y[i] - 8;
+    starFish[i].y = SIN_Y[i] - 12;
     starFish[i].width = 8;
     starFish[i].height = 8;
     starFish[i].xSpeed = -2;

@@ -215,7 +215,7 @@ PROGMEM const unsigned char numbersBig[] = {
 void drawScore(byte scoreX, byte scoreY, byte fontType)
 {
   char buf[10];
-  scorePlayer = arduboy.cpuLoad();
+  //scorePlayer = arduboy.cpuLoad();
   itoa(scorePlayer, buf, 10);
   char charLen = strlen(buf);
   char pad = 5 - charLen;
