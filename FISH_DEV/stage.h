@@ -22,16 +22,18 @@ void spawnWave()
   {
     spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 3));
 
-    if (scorePlayer > 20)
+    if (scorePlayer > 135)
       jellyMax = 2;
-    if (scorePlayer > 30)
+    if (scorePlayer > 202)
       eelMax = 2;
-    if (scorePlayer > 40)
+    if (scorePlayer > 303)
       jellyMax = 3;
+    if (scorePlayer > 454)
+      jellyMax = 4;
 
-    if (scorePlayer > 10)
+    if (scorePlayer > 90)
       createEnemy(ENEMY_EEL);
-    if (scorePlayer > 5)
+    if (scorePlayer > 45)
     createEnemy(ENEMY_JELLY);
     
     createEnemy(ENEMY_BAD);

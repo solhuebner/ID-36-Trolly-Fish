@@ -5,7 +5,12 @@
 
 extern Arduboy arduboy;
 
-#define MAX_STARS   4
+#define MAX_STARS   8
+
+const byte SIN_Y[] = {
+  20, 32, 41, 48,
+  54, 48, 41, 32,
+};
 
 const unsigned char PROGMEM star_bitmaps[] =
 {
@@ -56,9 +61,8 @@ void initStarFish()
 {
   for (byte i = 0; i < MAX_STARS; ++i)
   {
-    starFish[i].x = ((16 * i) + (32 * (i % 2))) % 128;
-    starFish[i].y = ((64 / (MAX_STARS / 2)) * (i + 1)) % 64;
-    starFish[i].y += 8;
+    starFish[i].x = 120 + (128 / MAX_STARS * i);
+    starFish[i].y = SIN_Y[i] - 8;
     starFish[i].width = 8;
     starFish[i].height = 8;
     starFish[i].xSpeed = -2;
