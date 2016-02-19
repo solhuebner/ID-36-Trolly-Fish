@@ -5,17 +5,21 @@
 
 
 #define MAX_ENEMIES             8
+#define SPAWN_DELAY             100
 
 extern Physics physics;
 extern unsigned int scorePlayer;
 
+unsigned int spawnTimer = SPAWN_DELAY;
+
 void spawnWave()
 {
-  unsigned int usedScore = scorePlayer >> 3;
-  usedScore = (usedScore == 0) ? 1 : usedScore;
+  spawnTimer--;
 
-  if (arduboy.everyXFrames(1000 + (500 / usedScore)))
+  if (spawnTimer == 0)
   {
+    spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 3));
+    
     createEnemy(ENEMY_JELLY);
     createEnemy(ENEMY_EEL);
     createEnemy(ENEMY_BAD);

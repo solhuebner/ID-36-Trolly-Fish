@@ -323,66 +323,73 @@ void updateEnemies()
   {
     for (byte i = 0; i < MAX_ENEMIES; i++)
     {
-      // Bad Fishy
-      if (enemyFish[i].type == ENEMY_BAD)
+      if (enemyFish[i].active)
       {
-        if (enemyFish[i].burst > 0)
+        // ----- Bad Fishy -----
+        // Bursts forward, with pause
+        if (enemyFish[i].type == ENEMY_BAD)
         {
-          // Move while bursting
-          enemyFish[i].x +=  enemyFish[i].xSpeed;
-          --enemyFish[i].burst;
-        }
-        else
-        {
-          // Decrement time before next burst
-          --enemyFish[i].burstTimer;
-          if (enemyFish[i].burstTimer == 0)
+          if (enemyFish[i].burst > 0)
           {
-            // Timer up, reset burst and burstTimer
-            enemyFish[i].burstTimer = BURST_WAIT;
-            enemyFish[i].burst = BURST_LENGTH;
+            // Move while bursting
+            enemyFish[i].x +=  enemyFish[i].xSpeed;
+            --enemyFish[i].burst;
+          }
+          else
+          {
+            // Decrement time before next burst
+            --enemyFish[i].burstTimer;
+            if (enemyFish[i].burstTimer == 0)
+            {
+              // Timer up, reset burst and burstTimer
+              enemyFish[i].burstTimer = BURST_WAIT;
+              enemyFish[i].burst = BURST_LENGTH;
+            }
           }
         }
-      }
-
-      // Jelly Fish
-      if (enemyFish[i].type == ENEMY_JELLY)
-      {
-        
-        if (enemyFish[i].burst > 0)
+  
+        // ----- Jelly Fish -----
+        // Bursts upward
+        // Moves faster horizontally when bursting
+        if (enemyFish[i].type == ENEMY_JELLY)
         {
-          // Move up while bursting
-          enemyFish[i].y +=  enemyFish[i].ySpeed;
-          // Faster left movement when bursting
-          enemyFish[i].x +=  enemyFish[i].xSpeed;
           
-          if (enemyFish[i].y <= 0)
-            enemyFish[i].burst = 1;
-            
-          --enemyFish[i].burst;
-        }
-        else
-        {
-          // Slower left movement not bursting
-          enemyFish[i].x--;
-          // Decrement time before next burst
-          --enemyFish[i].burstTimer;
-          enemyFish[i].y -= enemyFish[i].ySpeed / 2;
-          if (enemyFish[i].burstTimer == 0)
+          if (enemyFish[i].burst > 0)
           {
-            // Timer up, reset burst and burstTimer
-            enemyFish[i].burstTimer = BURST_WAIT;
-            enemyFish[i].burst = BURST_LENGTH;
+            // Move up while bursting
+            enemyFish[i].y +=  enemyFish[i].ySpeed;
+            // Faster left movement when bursting
+            enemyFish[i].x +=  enemyFish[i].xSpeed;
+            
+            if (enemyFish[i].y <= 0)
+              enemyFish[i].burst = 1;
+              
+            --enemyFish[i].burst;
+          }
+          else
+          {
+            // Slower left movement not bursting
+            enemyFish[i].x--;
+            // Decrement time before next burst
+            --enemyFish[i].burstTimer;
+            enemyFish[i].y -= enemyFish[i].ySpeed / 2;
+            if (enemyFish[i].burstTimer == 0)
+            {
+              // Timer up, reset burst and burstTimer
+              enemyFish[i].burstTimer = BURST_WAIT;
+              enemyFish[i].burst = BURST_LENGTH;
+            }
           }
         }
+  
+        // ----- Eel -----
+        // Steady left movement
+        if (enemyFish[i].type == ENEMY_EEL)
+          enemyFish[i].x +=  enemyFish[i].xSpeed;
+  
+        // Outside of room, deactivate
+        if ( enemyFish[i].x < (GAME_LEFT - enemyFish[i].width))  enemyFish[i].resetPos();
       }
-
-      // Eel
-      if (enemyFish[i].type == ENEMY_EEL)
-        enemyFish[i].x +=  enemyFish[i].xSpeed;
-
-      // Outside of room, deactivate
-      if ( enemyFish[i].x < (GAME_LEFT - enemyFish[i].width))  enemyFish[i].resetPos();
     }
   }
 }
