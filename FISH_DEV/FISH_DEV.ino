@@ -115,12 +115,18 @@ void loop() {
         enemyFish[i].resetPos();
         enemyFish[i].width = 14;
         enemyFish[i].height = 8;
+        enemyFish[i].burst = random(10);
+        enemyFish[i].burstTimer = random(10, 60);
+
+        enemyFish[i].active = false;
+        enemyFish[i].type = 0; //bad fish
       }
 
       gameState = STATE_GAME_PLAYING;
       break;
     case STATE_GAME_PLAYING:
       checkInputs();
+      spawnWave();
       updateStarFish();
       updateEnemies();
       checkIfScored();

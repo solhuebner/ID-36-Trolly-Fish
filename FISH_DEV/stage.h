@@ -5,9 +5,26 @@
 
 
 #define MAX_ENEMIES             8
+#define SPAWN_DELAY             100
 
 extern Physics physics;
 extern unsigned int scorePlayer;
+
+unsigned int spawnTimer = SPAWN_DELAY;
+
+void spawnWave()
+{
+  spawnTimer--;
+
+  if (spawnTimer == 0)
+  {
+    spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 3));
+    
+    createEnemy(ENEMY_JELLY);
+    createEnemy(ENEMY_EEL);
+    createEnemy(ENEMY_BAD);
+  }
+}
 
 boolean checkGameOver()
 {
