@@ -32,7 +32,7 @@ void checkInputs()
     trollyFish.y -= trollyFish.ySpeed;
   }
   
-  if (buttons.pressed(DOWN_BUTTON) && (trollyFish.y < GAME_BOTTOM - trollyFish.height))
+  if (buttons.pressed(DOWN_BUTTON) && (trollyFish.y < GAME_BOTTOM - trollyFish.height + 2))
   {
     trollyFish.y += trollyFish.ySpeed;
   }

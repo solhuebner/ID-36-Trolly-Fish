@@ -302,7 +302,7 @@ void createEnemy(byte type)
       enemyFish[i].xSpeed = -3;
       enemyFish[i].ySpeed = 0;
       enemyFish[i].width = 14;
-      enemyFish[i].height = 8;
+      enemyFish[i].height = 10;
 
       if (type == ENEMY_JELLY)
       {
@@ -387,7 +387,7 @@ void updateEnemies()
             if (enemyFish[i].burstTimer == 0)
             {
               // Timer up, reset burst and burstTimer
-              enemyFish[i].burstTimer = BURST_WAIT;
+              enemyFish[i].burstTimer = random(10) + BURST_WAIT;
               enemyFish[i].burst = BURST_LENGTH;
             }
           }
@@ -412,11 +412,11 @@ void drawEnemies()
   for (byte i = 0; i < MAX_ENEMIES; i++)
   {
     if (enemyFish[i].type == ENEMY_BAD)
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, badFishy_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 2, badFishy_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
     if (enemyFish[i].type == ENEMY_JELLY)
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, jellyFish_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 2, jellyFish_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
     if (enemyFish[i].type == ENEMY_EEL)
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, eel_plus_mask, trollyFrame);
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 2, eel_plus_mask, trollyFrame);
   }
 }
 

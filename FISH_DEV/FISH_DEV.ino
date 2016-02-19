@@ -108,7 +108,7 @@ void loop() {
     case STATE_MENU_PLAY:
       scorePlayer = 0;
       //starFish.resetPos();
-      initStarFish();
+      initStarFish(0);
       for (byte i = 0; i < MAX_ENEMIES; i++)
       {
         enemyFish[i].xSpeed = -3;

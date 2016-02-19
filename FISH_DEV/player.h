@@ -46,7 +46,7 @@ struct Player
     byte xSpeed, ySpeed;
 };
 
-Player trollyFish = {.x = 20, .y = 32, .width = 10, .height = 6, .xSpeed = 1, .ySpeed = 2};
+Player trollyFish = {.x = 20, .y = 32, .width = 10, .height = 8, .xSpeed = 1, .ySpeed = 2};
 
 void drawTrollyFish()
 {
@@ -56,7 +56,7 @@ void drawTrollyFish()
   if (arduboy.everyXFrames(6 / faster)) trollyFrame++;
 
   if (trollyFrame > 3) trollyFrame = 0;
-  sprites.drawPlusMask(trollyFish.x, trollyFish.y, Trolly_plus_mask, trollyFrame);
+  sprites.drawPlusMask(trollyFish.x - 4, trollyFish.y - 4, Trolly_plus_mask, trollyFrame);
 }
 
 #endif
