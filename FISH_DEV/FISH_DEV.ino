@@ -5,7 +5,7 @@
 
  MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
- 2015 - DRAGULA96 -JO3RI
+ 2015 JO3RI - GAVENO
 
  License: MIT : https://opensource.org/licenses/MIT
 
