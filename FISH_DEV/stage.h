@@ -12,6 +12,8 @@
 
 extern Physics physics;
 extern unsigned int scorePlayer;
+extern byte eelMax;
+extern byte jellyMax;
 
 unsigned int spawnTimer = SPAWN_DELAY;
 
@@ -22,9 +24,21 @@ void spawnWave()
   if (spawnTimer == 0)
   {
     spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 3));
-    
+
+    if (scorePlayer > 135)
+      jellyMax = 2;
+    if (scorePlayer > 202)
+      eelMax = 2;
+    if (scorePlayer > 303)
+      jellyMax = 3;
+    if (scorePlayer > 454)
+      jellyMax = 4;
+
+    if (scorePlayer > 90)
+      createEnemy(ENEMY_EEL);
+    if (scorePlayer > 45)
     createEnemy(ENEMY_JELLY);
-    createEnemy(ENEMY_EEL);
+    
     createEnemy(ENEMY_BAD);
   }
 }
@@ -201,7 +215,7 @@ PROGMEM const unsigned char numbersBig[] = {
 void drawScore(byte scoreX, byte scoreY, byte fontType)
 {
   char buf[10];
-  scorePlayer = arduboy.cpuLoad();
+  //scorePlayer = arduboy.cpuLoad();
   itoa(scorePlayer, buf, 10);
   char charLen = strlen(buf);
   char pad = 5 - charLen;
