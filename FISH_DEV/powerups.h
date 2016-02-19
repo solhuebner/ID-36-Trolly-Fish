@@ -55,7 +55,7 @@ void updateStarFish()
   if (starFish.x < GAME_LEFT) starFish.resetPos();
 
   arduboy.drawSprite(starFish.x, starFish.y, starMask_bitmaps, 7, 8, 0, BLACK);
-  arduboy.drawSprite(starFish.x, starFish.y, star_bitmaps, 7, 8, 0, WHITE);
+  arduboy.drawSprite(starFish.x, starFish.y - 4, star_bitmaps, 7, 8, 0, WHITE);
 }
 
 void checkIfScored() {

@@ -6,6 +6,13 @@
 #define MAX_ENEMIES             8
 #define GAME_LEFT               3
 
+#define ENEMY_BAD               0
+#define ENEMY_JELLY             1
+#define ENEMY_EEL               2
+
+#define BURST_LENGTH            15
+#define BURST_WAIT              20
+
 extern Arduboy arduboy;
 
 
@@ -237,23 +244,78 @@ PROGMEM const unsigned char eel_plus_mask[] = {
 0x06, 0x0F, 0x03, 0x0F, 0x03, 0x07, 0x01, 0x03, 0x00, 0x03, 
 };
 
+// Enemy Type variables
+byte numEels = 0;
+byte numJellys = 0;
+byte jellyMax = 1;
+byte eelMax = 1;
+
 struct Enemies
 {
   public:
-    uint8_t  x;
-    uint8_t y;
+    int16_t  x;
+    int16_t y;
     byte width, height;
-    byte xSpeed, ySpeed;
+    int8_t xSpeed, ySpeed;
 
-    void resetPos()
-    {
-      x = 12  * random(12, 20);
-      y = 10 * random(1, 6);
-    }
+    byte burst;
+    byte burstTimer;
+
+    byte type;
+    bool active;
+
+    void resetPos();
+    
 
 };
 
+void Enemies::resetPos()
+{
+   x = 12  * random(12, 20);
+   y = 10 * random(1, 6);
+
+   if (type == ENEMY_JELLY)
+      --numJellys;
+   if (type == ENEMY_EEL)
+      --numEels;
+
+   active = false;
+}
+
 Enemies enemyFish[MAX_ENEMIES];
+
+void createEnemy(byte type)
+{
+  if (type != ENEMY_JELLY || numJellys < jellyMax)
+  if (type != ENEMY_EEL || numEels < eelMax)
+  for (byte i = 0; i < MAX_ENEMIES; i++)
+  {
+    if (enemyFish[i].active == false)
+    {
+      enemyFish[i].active = true;
+      enemyFish[i].type = type;
+      enemyFish[i].xSpeed = -3;
+      enemyFish[i].ySpeed = 0;
+      enemyFish[i].width = 14;
+      enemyFish[i].height = 8;
+
+      if (type == ENEMY_JELLY)
+      {
+        enemyFish[i].ySpeed = -2;
+        enemyFish[i].height = 20;
+        numJellys++;
+      }
+      if (type == ENEMY_EEL)
+      {
+        enemyFish[i].xSpeed = -2;
+        enemyFish[i].width = 70;
+        numEels++;
+      }
+
+      return;
+    }
+  }
+}
 
 void updateEnemies()
 {
@@ -261,8 +323,66 @@ void updateEnemies()
   {
     for (byte i = 0; i < MAX_ENEMIES; i++)
     {
-      enemyFish[i].x +=  enemyFish[i].xSpeed;
-      if ( enemyFish[i].x < GAME_LEFT)  enemyFish[i].resetPos();
+      // Bad Fishy
+      if (enemyFish[i].type == ENEMY_BAD)
+      {
+        if (enemyFish[i].burst > 0)
+        {
+          // Move while bursting
+          enemyFish[i].x +=  enemyFish[i].xSpeed;
+          --enemyFish[i].burst;
+        }
+        else
+        {
+          // Decrement time before next burst
+          --enemyFish[i].burstTimer;
+          if (enemyFish[i].burstTimer == 0)
+          {
+            // Timer up, reset burst and burstTimer
+            enemyFish[i].burstTimer = BURST_WAIT;
+            enemyFish[i].burst = BURST_LENGTH;
+          }
+        }
+      }
+
+      // Jelly Fish
+      if (enemyFish[i].type == ENEMY_JELLY)
+      {
+        
+        if (enemyFish[i].burst > 0)
+        {
+          // Move up while bursting
+          enemyFish[i].y +=  enemyFish[i].ySpeed;
+          // Faster left movement when bursting
+          enemyFish[i].x +=  enemyFish[i].xSpeed;
+          
+          if (enemyFish[i].y <= 0)
+            enemyFish[i].burst = 1;
+            
+          --enemyFish[i].burst;
+        }
+        else
+        {
+          // Slower left movement not bursting
+          enemyFish[i].x--;
+          // Decrement time before next burst
+          --enemyFish[i].burstTimer;
+          enemyFish[i].y -= enemyFish[i].ySpeed / 2;
+          if (enemyFish[i].burstTimer == 0)
+          {
+            // Timer up, reset burst and burstTimer
+            enemyFish[i].burstTimer = BURST_WAIT;
+            enemyFish[i].burst = BURST_LENGTH;
+          }
+        }
+      }
+
+      // Eel
+      if (enemyFish[i].type == ENEMY_EEL)
+        enemyFish[i].x +=  enemyFish[i].xSpeed;
+
+      // Outside of room, deactivate
+      if ( enemyFish[i].x < (GAME_LEFT - enemyFish[i].width))  enemyFish[i].resetPos();
     }
   }
 }
@@ -273,7 +393,12 @@ void drawEnemies()
   if (fishFrame > 3) fishFrame = 0;
   for (byte i = 0; i < MAX_ENEMIES; i++)
   {
-    sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, badFishy_plus_mask, trollyFrame);
+    if (enemyFish[i].type == ENEMY_BAD)
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, badFishy_plus_mask, trollyFrame);
+    if (enemyFish[i].type == ENEMY_JELLY)
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, jellyFish_plus_mask, trollyFrame);
+    if (enemyFish[i].type == ENEMY_EEL)
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, eel_plus_mask, trollyFrame);
   }
 }
 

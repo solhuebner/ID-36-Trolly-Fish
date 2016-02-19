@@ -9,6 +9,19 @@
 extern Physics physics;
 extern unsigned int scorePlayer;
 
+void spawnWave()
+{
+  unsigned int usedScore = scorePlayer >> 3;
+  usedScore = (usedScore == 0) ? 1 : usedScore;
+
+  if (arduboy.everyXFrames(1000 + (500 / usedScore)))
+  {
+    createEnemy(ENEMY_JELLY);
+    createEnemy(ENEMY_EEL);
+    createEnemy(ENEMY_BAD);
+  }
+}
+
 boolean checkGameOver()
 {
   Rect player = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
