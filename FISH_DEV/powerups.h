@@ -13,30 +13,12 @@ const byte SIN_Y[] = {
   54, 48, 41, 32,
 };
 
-const unsigned char PROGMEM star_bitmaps[] =
-{
-  //     #  
-  //    ##  
-  // #  #  #
-  // ###### 
-  //  ## #  
-  //   #### 
-  //  ##  ##
-  //  #     
-  0x0C, 0xD8, 0x78, 0x2E, 0x3B, 0x68, 0x44, 
-};
+PROGMEM const unsigned char starFish_plus_mask[] = {
+// width, height
+7, 8,
+0x0C, 0x0C, 0xD8, 0xD8, 0x78, 0x78, 0x2E, 
+0x3E, 0x3B, 0x3B, 0x68, 0x68, 0x44, 0x44, 
 
-const unsigned char PROGMEM starMask_bitmaps[] =
-{
-  //     #  
-  //    ##  
-  // #  #  #
-  // ###### 
-  //  ####  
-  //   #### 
-  //  ##  ##
-  //  #     
-  0x0C, 0xD8, 0x78, 0x3E, 0x3B, 0x68, 0x44, 
 };
 
 void initStarFish(byte type);
@@ -156,9 +138,7 @@ void updateStarFish()
     {
       starFish[i].x += starFish[i].xSpeed;
       if (starFish[i].x < GAME_LEFT) starFish[i].resetPos();
-    
-      arduboy.drawSprite(starFish[i].x, starFish[i].y, starMask_bitmaps, 7, 8, 0, BLACK);
-      arduboy.drawSprite(starFish[i].x, starFish[i].y + 4, star_bitmaps, 7, 8, 0, WHITE);
+      sprites.drawPlusMask(starFish[i].x, starFish[i].y, starFish_plus_mask, 0);
     }
   }
 }
@@ -171,7 +151,7 @@ void checkIfScored() {
     Rect starFishPoint = {.x = starFish[i].x, .y = starFish[i].y, .width = starFish[i].width, starFish[i].height};
   
     if (physics.collide(starFishPoint, playerRect)) {
-      arduboy.tunes.tone(300, 200);
+      arduboy.tunes.tone(300, 40);
       scorePlayer++;
       starFish[i].resetPos();
     }
