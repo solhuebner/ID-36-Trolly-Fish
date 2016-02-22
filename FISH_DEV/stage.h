@@ -15,7 +15,7 @@ extern unsigned int scorePlayer;
 extern byte eelMax;
 extern byte jellyMax;
 
-unsigned int spawnTimer = SPAWN_DELAY;
+int spawnTimer = SPAWN_DELAY;
 
 void spawnWave()
 {
