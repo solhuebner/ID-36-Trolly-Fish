@@ -65,6 +65,8 @@ void loop() {
   buttons.poll();
   if (soundYesNo == true) arduboy.audio.on();
   else arduboy.audio.off();
+  if (arduboy.everyXFrames(6))bubblesFrame++;
+  if (bubblesFrame > 12) bubblesFrame = 0;
   arduboy.clearDisplay();
   switch (gameState)
   {
@@ -75,15 +77,14 @@ void loop() {
       break;
     case STATE_MENU_MAIN:
       // show the splash art
-      arduboy.drawBitmap(0, 0, tittlescreen, 128, 64, WHITE);
+      arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
+      arduboy.drawBitmap(73, 2, titleMenu, 49, 24, WHITE);
       sprites.drawPlusMask(73 + (menuX*26), 2 + (menuY*12), bubbles_plus_mask, bubblesFrame);
       if (buttons.justPressed(RIGHT_BUTTON) && (!menuX)) menuX = !menuX;
       if (buttons.justPressed(LEFT_BUTTON) && (menuX)) menuX = !menuX;
       if (buttons.justPressed(DOWN_BUTTON) && (!menuY)) menuY = !menuY;
       if (buttons.justPressed(UP_BUTTON) && (menuY)) menuY = !menuY;
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = 2 + menuX + (2*menuY);
-      if (arduboy.everyXFrames(6))bubblesFrame++;
-      if (bubblesFrame > 12) bubblesFrame = 0;
       break;
     case STATE_MENU_HELP: // QR code
       arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
@@ -94,7 +95,9 @@ void loop() {
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
       break;
     case STATE_MENU_SOUNDFX: // soundconfig screen
-      arduboy.drawBitmap(0, 0, tittlescreen, 128, 64, WHITE);
+      arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
+      arduboy.drawBitmap(81, 2, soundMenu, 33, 24, WHITE);
+      sprites.drawPlusMask(78 + (soundYesNo*20) , 14 , bubbles_plus_mask, bubblesFrame);
       if (buttons.justPressed(RIGHT_BUTTON)) soundYesNo = true;
       if (buttons.justPressed(LEFT_BUTTON)) soundYesNo = false;
       if (buttons.justPressed(A_BUTTON | B_BUTTON))
