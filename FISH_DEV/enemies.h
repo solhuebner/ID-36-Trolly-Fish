@@ -291,38 +291,35 @@ Enemies enemyFish[MAX_ENEMIES];
 
 void createEnemy(byte type)
 {
-  if (type == ENEMY_JELLY && numJellys >= jellyMax)
-    return;
-  if (type == ENEMY_EEL && numEels >= eelMax)
-    return;
-    
-  for (byte i = 0; i < MAX_ENEMIES; i++)
-  {
-    if (enemyFish[i].active == false)
-    {
-      enemyFish[i].active = true;
-      enemyFish[i].type = type;
-      enemyFish[i].xSpeed = -3;
-      enemyFish[i].ySpeed = 0;
-      enemyFish[i].width = 14;
-      enemyFish[i].height = 10;
-
-      if (type == ENEMY_JELLY)
+  if (type != ENEMY_JELLY || numJellys < jellyMax)
+    if (type != ENEMY_EEL || numEels < eelMax)
+      for (byte i = 0; i < MAX_ENEMIES; i++)
       {
-        enemyFish[i].ySpeed = -2;
-        enemyFish[i].height = 20;
-        numJellys++;
-      }
-      if (type == ENEMY_EEL)
-      {
-        enemyFish[i].xSpeed = -2;
-        enemyFish[i].width = 70;
-        numEels++;
-      }
+        if (enemyFish[i].active == false)
+        {
+          enemyFish[i].active = true;
+          enemyFish[i].type = type;
+          enemyFish[i].xSpeed = -3;
+          enemyFish[i].ySpeed = 0;
+          enemyFish[i].width = 14;
+          enemyFish[i].height = 10;
 
-      return;
-    }
-  }
+          if (type == ENEMY_JELLY)
+          {
+            enemyFish[i].ySpeed = -2;
+            enemyFish[i].height = 20;
+            numJellys++;
+          }
+          if (type == ENEMY_EEL)
+          {
+            enemyFish[i].xSpeed = -2;
+            enemyFish[i].width = 70;
+            numEels++;
+          }
+
+          return;
+        }
+      }
 }
 
 void updateEnemies()
@@ -397,11 +394,10 @@ void updateEnemies()
           if (enemyFish[i].type == ENEMY_EEL)
             enemyFish[i].x +=  enemyFish[i].xSpeed;
 
+          // Outside of room, deactivate
+          if ( enemyFish[i].x < (GAME_LEFT - enemyFish[i].width))  enemyFish[i].resetPos();
           break;
       }
-
-      // Outside of room, deactivate
-          if ( enemyFish[i].x < (GAME_LEFT - enemyFish[i].width))  enemyFish[i].resetPos();
     }
   }
 }
