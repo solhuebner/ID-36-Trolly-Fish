@@ -1,4 +1,4 @@
-## Trolly Fish
+µ## Trolly Fish
 Trolly fish is like an endless runner, where you need to dodge the enemies, collect stars and use powerups to progress as far as you can.
 
 We need a good balance between stars to catch and enemies.
@@ -22,7 +22,7 @@ We need a good balance between stars to catch and enemies.
 
 ## POWER-UP LIST
 | **SPRITE** | **SIZE** | **FRAMES** | **TIMER** | **Description** |
-| ---        | ---      | ---        | ---       |
+| ---        | ---      | ---        | ---       | ---             |
 | **starFish** | 12x12 | 1 | | |
 | **turnFish** | 12x12 | 1 | | all enemies on screen turn into stars |
 | **stopFish** | 12x12 | 1 | yes | all enemies stop swimming, but stars and power-ups keep coming |
@@ -32,7 +32,3 @@ We need a good balance between stars to catch and enemies.
 | **lifeFish** | 12x12 | 1 | | player get's 1 continue, automaticly used when player dies |
 | **shockFish** | 12x12 | 1 | yes | player can shock all fish for extra points |
 | **magnetFish** | 12x12 | 1 | yes | all stars get pulled towards the player |
-
-
-
-
