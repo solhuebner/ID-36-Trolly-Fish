@@ -7,6 +7,7 @@ extern Arduboy arduboy;
 
 #define MAX_STARS   8
 #define TOTAL_TYPES 4
+#define STAR_HEIGHT 10
 
 const byte SIN_Y[] = {
   23, 32, 41, 48,
@@ -66,67 +67,74 @@ void GameObject::resetPos()
 
 void initStarFish(byte type)
 {
-  if (type == 0)
+  switch (type)
   {
-    // Big sin wave
-    for (byte i = 0; i < MAX_STARS; ++i)
+    case 0:
     {
-      starFish[i].x = 120 + (128 / MAX_STARS * i);
-      starFish[i].y = SIN_Y[i] - 12;
-      starFish[i].width = 8;
-      starFish[i].height = 8;
-      starFish[i].xSpeed = -2;
-      starFish[i].ySpeed = 0;
-      starFish[i].active = true;
-      cycles = 3 * MAX_STARS;
+      // Big sin wave
+      for (byte i = 0; i < MAX_STARS; ++i)
+      {
+        starFish[i].x = 120 + (128 / MAX_STARS * i);
+        starFish[i].y = SIN_Y[i] - 12;
+        starFish[i].width = 8;
+        starFish[i].height = STAR_HEIGHT;
+        starFish[i].xSpeed = -2;
+        starFish[i].ySpeed = 0;
+        starFish[i].active = true;
+        cycles = 3 * MAX_STARS;
+      }
     }
-  }
-  if (type == 1)
-  {
-    byte y = random(30);
-    // Small sin wave
-    for (byte i = 0; i < MAX_STARS; ++i)
+    break;
+    case 1:
     {
-      starFish[i].x = 120 + (128 / MAX_STARS * i);
-      starFish[i].y = (SIN_Y[i] / 3) - 12 + y;
-      starFish[i].width = 8;
-      starFish[i].height = 8;
-      starFish[i].xSpeed = -2;
-      starFish[i].ySpeed = 0;
-      starFish[i].active = true;
-      cycles = 3 * MAX_STARS;
+      byte y = random(5, 48);
+      // Small sin wave
+      for (byte i = 0; i < MAX_STARS; ++i)
+      {
+        starFish[i].x = 120 + (128 / MAX_STARS * i);
+        starFish[i].y = (SIN_Y[i] / 3) - 12 + y;
+        starFish[i].width = 8;
+        starFish[i].height = STAR_HEIGHT;
+        starFish[i].xSpeed = -2;
+        starFish[i].ySpeed = 0;
+        starFish[i].active = true;
+        cycles = 3 * MAX_STARS;
+      }
     }
-  }
-  if (type == 2)
-  {
-    // Straight line
-    byte y = random(10, 54);
-    for (byte i = 0; i < MAX_STARS; ++i)
+    break;
+    case 2:
     {
-      starFish[i].x = 120 + (128 / MAX_STARS * i);
-      starFish[i].y = y;
-      starFish[i].width = 8;
-      starFish[i].height = 8;
-      starFish[i].xSpeed = -2;
-      starFish[i].ySpeed = 0;
-      starFish[i].active = true;
-      cycles = 1 * MAX_STARS;
+      // Straight line
+      byte y = random(10, 54);
+      for (byte i = 0; i < MAX_STARS; ++i)
+      {
+        starFish[i].x = 120 + (128 / MAX_STARS * i);
+        starFish[i].y = y;
+        starFish[i].width = 8;
+        starFish[i].height = STAR_HEIGHT;
+        starFish[i].xSpeed = -2;
+        starFish[i].ySpeed = 0;
+        starFish[i].active = true;
+        cycles = 1 * MAX_STARS;
+      }
     }
-  }
-  if (type == 3)
-  {
-    // random cluster
-    for (byte i = 0; i < MAX_STARS; ++i)
+    break;
+    case 3:
     {
-      starFish[i].x = 120 + random(24);
-      starFish[i].y = random(20, 44);
-      starFish[i].width = 8;
-      starFish[i].height = 8;
-      starFish[i].xSpeed = -2;
-      starFish[i].ySpeed = 0;
-      starFish[i].active = true;
-      cycles = 0 * MAX_STARS;
+      // random cluster
+      for (byte i = 0; i < MAX_STARS; ++i)
+      {
+        starFish[i].x = 120 + random(24);
+        starFish[i].y = random(20, 44);
+        starFish[i].width = 8;
+        starFish[i].height = STAR_HEIGHT;
+        starFish[i].xSpeed = -2;
+        starFish[i].ySpeed = 0;
+        starFish[i].active = true;
+        cycles = 0 * MAX_STARS;
+      }
     }
+    break;
   }
 }
 
@@ -138,7 +146,7 @@ void updateStarFish()
     {
       starFish[i].x += starFish[i].xSpeed;
       if (starFish[i].x < GAME_LEFT) starFish[i].resetPos();
-      sprites.drawPlusMask(starFish[i].x, starFish[i].y, starFish_plus_mask, 0);
+      sprites.drawPlusMask(starFish[i].x, starFish[i].y - 1, starFish_plus_mask, 0);
     }
   }
 }

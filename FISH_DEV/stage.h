@@ -5,7 +5,7 @@
 
 
 #define MAX_ENEMIES               8
-#define SPAWN_DELAY               100
+#define SPAWN_DELAY               220
 #define SCORE_SMALL_FONT          0
 #define SCORE_BIG_FONT            1
 
@@ -15,31 +15,34 @@ extern unsigned int scorePlayer;
 extern byte eelMax;
 extern byte jellyMax;
 
-unsigned int spawnTimer = SPAWN_DELAY;
+int spawnTimer = 20;
 
 void spawnWave()
 {
   spawnTimer--;
 
-  if (spawnTimer == 0)
+  if (spawnTimer <= 0)
   {
-    spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 3));
+    spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 7));
 
     if (scorePlayer > 135)
       jellyMax = 2;
-    if (scorePlayer > 202)
+    if (scorePlayer > 400)
       eelMax = 2;
-    if (scorePlayer > 303)
+    /*if (scorePlayer > 303)
       jellyMax = 3;
     if (scorePlayer > 454)
-      jellyMax = 4;
+      jellyMax = 4;*/
 
-    if (scorePlayer > 90)
-      createEnemy(ENEMY_EEL);
-    if (scorePlayer > 45)
-    createEnemy(ENEMY_JELLY);
-    
-    createEnemy(ENEMY_BAD);
+    if (scorePlayer > 200)
+      createEnemy(ENEMY_EEL, (random(3) * 28)); // Three possible eel lanes, not distruptor, just limits v movement
+    if (scorePlayer > 70)
+    createEnemy(ENEMY_JELLY, (random(2) * 63)); // Two possible jelly lanes, disruptors
+
+    // There is always enough room between bad fish, jellyfish and eels are what forces a move
+    createEnemy(ENEMY_BAD, (random(3) * 28)); // Fish are fillers
+    if (scorePlayer > 50)
+      createEnemy(ENEMY_BAD, (random(3) * 28)); // Extra fillers
   }
 }
 
@@ -49,10 +52,10 @@ boolean checkGameOver()
   Rect enemy;
   for (byte i = 0; i < MAX_ENEMIES; i++)
   {
-    enemy.x = enemyFish[i].x + 3;
-    enemy.y = enemyFish[i].y + 4;
-    enemy.width = enemyFish[i].width - 4;
-    enemy.height = enemyFish[i].height - 8;
+    enemy.x = enemyFish[i].x;
+    enemy.y = enemyFish[i].y;
+    enemy.width = enemyFish[i].width;
+    enemy.height = enemyFish[i].height;
     if (physics.collide(enemy, player))
     {
       arduboy.tunes.tone(90, 300);
