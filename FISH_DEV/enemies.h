@@ -291,37 +291,40 @@ Enemies enemyFish[MAX_ENEMIES];
 
 void createEnemy(byte type, byte y)
 {
-  if (type != ENEMY_JELLY || numJellys < jellyMax)
-    if (type != ENEMY_EEL || numEels < eelMax)
-      for (byte i = 0; i < MAX_ENEMIES; i++)
+  if (type == ENEMY_JELLY && numJellys >= jellyMax)
+    return;
+  if (type == ENEMY_EEL && numEels >= eelMax)
+    return;
+    
+  for (byte i = 0; i < MAX_ENEMIES; i++)
+  {
+    if (enemyFish[i].active == false)
+    {
+      enemyFish[i].active = true;
+      enemyFish[i].type = type;
+      enemyFish[i].xSpeed = -3;
+      enemyFish[i].ySpeed = 0;
+      enemyFish[i].width = 16;
+      enemyFish[i].height = 16;
+      enemyFish[i].y = y;
+
+      if (type == ENEMY_JELLY)
       {
-        if (enemyFish[i].active == false)
-        {
-          enemyFish[i].active = true;
-          enemyFish[i].type = type;
-          enemyFish[i].xSpeed = -3;
-          enemyFish[i].ySpeed = 0;
-          enemyFish[i].width = 16;
-          enemyFish[i].height = 16;
-          enemyFish[i].y = y;
-
-          if (type == ENEMY_JELLY)
-          {
-            enemyFish[i].ySpeed = -2;
-            enemyFish[i].height = 20;
-            numJellys++;
-          }
-          if (type == ENEMY_EEL)
-          {
-            enemyFish[i].xSpeed = -2;
-            enemyFish[i].width = 80;
-            enemyFish[i].height = 10;
-            numEels++;
-          }
-
-          return;
-        }
+        enemyFish[i].ySpeed = -2;
+        enemyFish[i].height = 20;
+        numJellys++;
       }
+      if (type == ENEMY_EEL)
+      {
+        enemyFish[i].xSpeed = -2;
+        enemyFish[i].width = 80;
+        enemyFish[i].height = 10;
+        numEels++;
+      }
+
+      return;
+    }
+  }
 }
 
 void updateEnemies()
