@@ -147,8 +147,12 @@ void triggerPowerUp(byte type)
     case PU_TURNFISH: arduboy.tunes.tone(300, 40);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
       {
-        if (enemyFish[i].active)
+        if (enemyFish[i].active && enemyFish[i].x < 128)
+        {
+          if (enemyFish[i].type == ENEMY_JELLY) numJellys--;
+          if (enemyFish[i].type == ENEMY_EEL) numEels--;
           enemyFish[i].type = ENEMY_STAR;
+        }
       }
       break;
     case PU_STOPFISH: arduboy.tunes.tone(300, 40);
@@ -158,8 +162,12 @@ void triggerPowerUp(byte type)
     case PU_POPFISH: arduboy.tunes.tone(300, 40);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
       {
-        if (enemyFish[i].active)
+        if (enemyFish[i].active && enemyFish[i].x < 128)
+        {
+          if (enemyFish[i].type == ENEMY_JELLY) numJellys--;
+          if (enemyFish[i].type == ENEMY_EEL) numEels--;
           enemyFish[i].type = ENEMY_BUBBLE;
+        }
       }
       break;
     case PU_PROTECTFISH: arduboy.tunes.tone(300, 40);

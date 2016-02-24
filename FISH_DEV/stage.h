@@ -71,6 +71,9 @@ void spawnWave()
 
 boolean checkGameOver()
 {
+  if (getPowerup(PU_PROTECTFISH) == PU_ON) // protected
+        return false;
+        
   Rect player = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
   Rect enemy;
   for (byte i = 0; i < MAX_ENEMIES; i++)
@@ -81,16 +84,14 @@ boolean checkGameOver()
     enemy.height = enemyFish[i].height;
     if (physics.collide(enemy, player))
     {
-      if (getPowerup(PU_LIFEFISH) == PU_ON) // extra life
+      if (getPowerup(PU_LIFEFISH)) // extra life
       {
         arduboy.tunes.tone(90, 300);
         setPowerup(PU_LIFEFISH, PU_OFF);
         enemyFish[i].x -= 32;
+        enemyFish[i].resetPos();
         return false;
       }
-
-      if (getPowerup(PU_PROTECTFISH) == PU_ON) // protected
-        return false;
 
       if (enemyFish[i].type == ENEMY_BUBBLE)
         return false;
