@@ -133,7 +133,7 @@ void createPowerUp(byte type)
 
   powerUp.active = true;
   powerUp.x = 128;
-  powerUp.y = random(4, 60);
+  powerUp.y = random(4, 50);
   powerUp.type = type;
 }
 
@@ -153,7 +153,7 @@ void triggerPowerUp(byte type)
       break;
     case PU_STOPFISH: arduboy.tunes.tone(300, 40);
       setPowerup(type, PU_ON);
-      pu_timers[PUT_STOP] = 255;
+      pu_timers[PUT_STOP] = 153;
       break;
     case PU_POPFISH: arduboy.tunes.tone(300, 40);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
@@ -337,11 +337,12 @@ void initStarFish(byte type)
     break;
     case 3:
     {
-      // random cluster
+      // square cluster
+      byte y = random(10, 40);
       for (byte i = 0; i < MAX_STARS; ++i)
       {
-        starFish[i].x = 120 + random(24);
-        starFish[i].y = random(20, 44);
+        starFish[i].x = 120 + ((i % 4) * 8);
+        starFish[i].y = y + ((i / 4) * 8);
         starFish[i].width = 8;
         starFish[i].height = STAR_HEIGHT;
         starFish[i].xSpeed = -2;
@@ -362,8 +363,11 @@ void updateStarFish()
     {
       if (getPowerup(PU_MAGNETFISH))
       {
-        if (starFish[i].y < trollyFish.y) starFish[i].y++;
-        if (starFish[i].y > trollyFish.y) starFish[i].y--;
+        if (arduboy.everyXFrames(2) && abs(trollyFish.x - starFish[i].x) < 32)
+        {
+          if (starFish[i].y < trollyFish.y) starFish[i].y++;
+          if (starFish[i].y > trollyFish.y) starFish[i].y--;
+        }
       }
       
       starFish[i].x += starFish[i].xSpeed;

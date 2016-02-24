@@ -112,6 +112,7 @@ void loop() {
       scorePlayer = 0;
       //starFish.resetPos();
       initStarFish(0);
+      powerups = 0x00;   //No starting active powerups
       pu_timers[PUT_STOP] = 255;        // Timer for PU_STOPFISH
       pu_timers[PUT_PROTECT] = 255;     // Timer for PU_PROTECTFISH
       pu_timers[PUT_SHOCK] = 255;       // Timer for PU_SHOCKFISH
