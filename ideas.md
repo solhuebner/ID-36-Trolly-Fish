@@ -21,17 +21,17 @@ We need a good balance between stars to catch and enemies.
 | **Eel** | 80x16 | 4 | eel_16x80 | 3 |
 
 ## POWER-UP LIST
-| **SPRITE** | **SIZE** | **FRAMES** | **NAME** | **TIMER** |
-| ---        | ---      | ---        | ---      | ---       |
-| **starFish** | 12x12 | 1 | starFish_12x16 | |
-| **turnFish** | 12x12 | 1 | turnFish_12x16 | |
-| **stopFish** | 12x12 | 1 | stopFish_12x16 | yes |
-| **popFish** | 12x12 | 1 | popFish_12x16 | |
-| **shootFish** | 12x12 | 1 | shootFish_12x16 | |
-| **protectFish** | 12x12 | 1 | protectFish_12x16 | yes |
-| **lifeFish** | 12x12 | 1 | lifeFish_12x16 | |
-| **shockFish** | 12x12 | 1 | shockFish_12x16 | yes |
-| **magnetFish** | 12x12 | 1 | magnetFish_12x16 | yes |
+| **SPRITE** | **SIZE** | **FRAMES** | **TIMER** | **Description** |
+| ---        | ---      | ---        | ---       |
+| **starFish** | 12x12 | 1 | | |
+| **turnFish** | 12x12 | 1 | | all enemies on screen turn into stars |
+| **stopFish** | 12x12 | 1 | yes | all enemies stop swimming, but stars and power-ups keep coming |
+| **popFish** | 12x12 | 1 | | all enemies on screen pop like bubbles |
+| **shootFish** | 12x12 | 1 | | player gets 3 bubbles he can shoot with to kill enemies |
+| **protectFish** | 12x12 | 1 | yes | player is in a protective bubble |
+| **lifeFish** | 12x12 | 1 | | player get's 1 continue, automaticly used when player dies |
+| **shockFish** | 12x12 | 1 | yes | player can shock all fish for extra points |
+| **magnetFish** | 12x12 | 1 | yes | all stars get pulled towards the player |
 
 
 
