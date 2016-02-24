@@ -142,9 +142,9 @@ void triggerPowerUp(byte type)
 {
   switch (type)
   {
-    case PU_STARFISH: arduboy.tunes.tone(300, 40);
+    case PU_STARFISH: arduboy.tunes.tone(300, 50);
       break;
-    case PU_TURNFISH: arduboy.tunes.tone(300, 40);
+    case PU_TURNFISH: arduboy.tunes.tone(300, 50);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
       {
         if (enemyFish[i].active && enemyFish[i].x < 128)
@@ -155,11 +155,11 @@ void triggerPowerUp(byte type)
         }
       }
       break;
-    case PU_STOPFISH: arduboy.tunes.tone(300, 40);
+    case PU_STOPFISH: arduboy.tunes.tone(300, 50);
       setPowerup(type, PU_ON);
       pu_timers[PUT_STOP] = 153;
       break;
-    case PU_POPFISH: arduboy.tunes.tone(300, 40);
+    case PU_POPFISH: arduboy.tunes.tone(300, 50);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
       {
         if (enemyFish[i].active && enemyFish[i].x < 128)
@@ -170,18 +170,18 @@ void triggerPowerUp(byte type)
         }
       }
       break;
-    case PU_PROTECTFISH: arduboy.tunes.tone(300, 40);
+    case PU_PROTECTFISH: arduboy.tunes.tone(350, 50);
       setPowerup(type, PU_ON);
       pu_timers[PUT_PROTECT] = 255;
       break;
-    case PU_LIFEFISH: arduboy.tunes.tone(300, 40);
+    case PU_LIFEFISH: arduboy.tunes.tone(280, 50);
       setPowerup(type, PU_ON);
       break;
-    case PU_SHOCKFISH: arduboy.tunes.tone(300, 40);
+    case PU_SHOCKFISH: arduboy.tunes.tone(300, 50);
       setPowerup(type, PU_ON);
       pu_timers[PUT_SHOCK] = 255;
       break;
-    case PU_MAGNETFISH: arduboy.tunes.tone(300, 40);
+    case PU_MAGNETFISH: arduboy.tunes.tone(380, 50);
       setPowerup(type, PU_ON);
       pu_timers[PUT_MAGNET] = 255;
       break;
