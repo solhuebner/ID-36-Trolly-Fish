@@ -5,7 +5,7 @@
 
 
 #define MAX_ENEMIES               8
-#define SPAWN_DELAY               100
+#define SPAWN_DELAY               200
 #define SCORE_SMALL_FONT          0
 #define SCORE_BIG_FONT            1
 
@@ -34,12 +34,15 @@ void spawnWave()
     if (scorePlayer > 454)
       jellyMax = 4;
 
-    if (scorePlayer > 90)
-      createEnemy(ENEMY_EEL);
-    if (scorePlayer > 45)
-    createEnemy(ENEMY_JELLY);
-    
-    createEnemy(ENEMY_BAD);
+    if (scorePlayer > 120)
+      createEnemy(ENEMY_EEL, (random(3) * 21) + 4); // Three possible eel lanes
+    if (scorePlayer > 70)
+    createEnemy(ENEMY_JELLY, (random(2) * 63)); // Two possible jelly lanes, disruptors
+
+    // There is always enough room between bad fish, jellyfish and eels are what forces a move
+    createEnemy(ENEMY_BAD, (random(0, 3) * 28)); // Fish are fillers
+    if (scorePlayer > 50)
+      createEnemy(ENEMY_BAD, (random(0, 3) * 28)); // Extra fillers
   }
 }
 
@@ -49,10 +52,10 @@ boolean checkGameOver()
   Rect enemy;
   for (byte i = 0; i < MAX_ENEMIES; i++)
   {
-    enemy.x = enemyFish[i].x + 3;
-    enemy.y = enemyFish[i].y + 4;
-    enemy.width = enemyFish[i].width - 4;
-    enemy.height = enemyFish[i].height - 8;
+    enemy.x = enemyFish[i].x;
+    enemy.y = enemyFish[i].y;
+    enemy.width = enemyFish[i].width;
+    enemy.height = enemyFish[i].height;
     if (physics.collide(enemy, player))
     {
       arduboy.tunes.tone(90, 300);
