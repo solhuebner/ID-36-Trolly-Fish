@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 
+#include "enemies.h"
 
 #define MAX_ENEMIES               8
 #define SPAWN_DELAY               220
@@ -16,7 +17,7 @@ extern byte eelMax;
 extern byte jellyMax;
 
 
-#define PU_STARFISH     0
+#define PU_SHOOTFISH    0
 #define PU_TURNFISH     1
 #define PU_STOPFISH     2
 #define PU_POPFISH      3
@@ -36,14 +37,15 @@ int spawnTimer = 20;
 
 void spawnWave()
 {
-  spawnTimer--;
+  if (getPowerup(PU_STOPFISH) == PU_OFF)
+    spawnTimer--;
 
   if (spawnTimer <= 0)
   {
     spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 7));
 
     // Powerup spawns
-    if (random(3) == 0)
+    //if (random(1) == 0)
       createPowerUp(random(8));
 
     if (scorePlayer > 135)
@@ -79,10 +81,24 @@ boolean checkGameOver()
     enemy.height = enemyFish[i].height;
     if (physics.collide(enemy, player))
     {
-      if (getPowerup(PU_LIFEFISH) == PU_ON)
+      if (getPowerup(PU_LIFEFISH) == PU_ON) // extra life
       {
         arduboy.tunes.tone(90, 300);
         setPowerup(PU_LIFEFISH, PU_OFF);
+        enemyFish[i].x -= 32;
+        return false;
+      }
+
+      if (getPowerup(PU_PROTECTFISH) == PU_ON) // protected
+        return false;
+
+      if (enemyFish[i].type == ENEMY_BUBBLE)
+        return false;
+
+      if (enemyFish[i].type == ENEMY_STAR)
+      {
+        scorePlayer++;
+        enemyFish[i].resetPos();
         return false;
       }
       

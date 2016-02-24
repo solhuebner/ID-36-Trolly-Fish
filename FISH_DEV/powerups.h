@@ -3,17 +3,23 @@
 
 #include <Arduino.h>
 
+#define MAX_ENEMIES             8
+
 extern Arduboy arduboy;
+extern unsigned int scorePlayer;
+extern Physics physics;
+//extern Player trollyFish;
 
 #define MAX_STARS   8
 #define TOTAL_TYPES 4
 #define STAR_HEIGHT 10
 
-#define PU_STARFISH     0
+#define GAME_LEFT               3
+
+#define PU_SHOOTFISH    0
 #define PU_TURNFISH     1
 #define PU_STOPFISH     2
 #define PU_POPFISH      3
-//#define PU_SHOOTFISH    4
 #define PU_PROTECTFISH  4
 #define PU_LIFEFISH     5
 #define PU_SHOCKFISH    6
@@ -85,11 +91,6 @@ PROGMEM const unsigned char powerUps_plus_mask[] = {
 byte powerups = 0x00;   //Active powerups
 byte pu_timers[4];
 
-//pu_timers[PUT_STOP] = 255;        // Timer for PU_STOPFISH
-//pu_timers[PUT_PROTECT] = 255;     // Timer for PU_PROTECTFISH
-//pu_timers[PUT_SHOCK] = 255;       // Timer for PU_SHOCKFISH
-//pu_timers[PUT_MAGNET] = 255;      // Timer for PU_MAGNETFISH
-
 // Set the value of a powerup flag
 void setPowerup(byte index, byte state)
 {
@@ -144,18 +145,29 @@ void triggerPowerUp(byte type)
     case PU_STARFISH: arduboy.tunes.tone(300, 40);
       break;
     case PU_TURNFISH: arduboy.tunes.tone(300, 40);
+      for (byte i = 0; i < MAX_ENEMIES; ++i)
+      {
+        if (enemyFish[i].active)
+          enemyFish[i].type = ENEMY_STAR;
+      }
       break;
     case PU_STOPFISH: arduboy.tunes.tone(300, 40);
       setPowerup(type, PU_ON);
       pu_timers[PUT_STOP] = 255;
       break;
     case PU_POPFISH: arduboy.tunes.tone(300, 40);
+      for (byte i = 0; i < MAX_ENEMIES; ++i)
+      {
+        if (enemyFish[i].active)
+          enemyFish[i].type = ENEMY_BUBBLE;
+      }
       break;
     case PU_PROTECTFISH: arduboy.tunes.tone(300, 40);
       setPowerup(type, PU_ON);
       pu_timers[PUT_PROTECT] = 255;
       break;
     case PU_LIFEFISH: arduboy.tunes.tone(300, 40);
+      setPowerup(type, PU_ON);
       break;
     case PU_SHOCKFISH: arduboy.tunes.tone(300, 40);
       setPowerup(type, PU_ON);
@@ -171,23 +183,26 @@ void triggerPowerUp(byte type)
 void updatePowerUp()
 {
   // Decrement timers
-  for (byte i = 0; i < 4; ++i)
+  if (arduboy.everyXFrames(3))
   {
-    if (pu_timers[i] > 0)
+    for (byte i = 0; i < 4; ++i)
     {
-      --pu_timers[i];
-      if (pu_timers[i] == 0)
+      if (pu_timers[i] > 0)
       {
-        switch (i)
+        --pu_timers[i];
+        if (pu_timers[i] == 0)
         {
-          case PUT_STOP: setPowerup(PU_STOPFISH, PU_OFF);
-            break;
-          case PUT_SHOCK: setPowerup(PU_SHOCKFISH, PU_OFF);
-            break;
-          case PUT_PROTECT: setPowerup(PU_PROTECTFISH, PU_OFF);
-            break;
-          case PUT_MAGNET: setPowerup(PU_MAGNETFISH, PU_OFF);
-            break;
+          switch (i)
+          {
+            case PUT_STOP: setPowerup(PU_STOPFISH, PU_OFF);
+              break;
+            case PUT_SHOCK: setPowerup(PU_SHOCKFISH, PU_OFF);
+              break;
+            case PUT_PROTECT: setPowerup(PU_PROTECTFISH, PU_OFF);
+              break;
+            case PUT_MAGNET: setPowerup(PU_MAGNETFISH, PU_OFF);
+              break;
+          }
         }
       }
     }
@@ -198,7 +213,7 @@ void updatePowerUp()
   {
     powerUp.x += powerUp.xSpeed;
     if (powerUp.x < GAME_LEFT) powerUp.active = false;
-    sprites.drawPlusMask(powerUp.x, powerUp.y - 1, starFish_plus_mask, 0);
+    sprites.drawPlusMask(powerUp.x, powerUp.y - 1, powerUps_plus_mask, powerUp.type);
 
     Rect playerRect = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
 
@@ -345,6 +360,12 @@ void updateStarFish()
   {
     if (starFish[i].active)
     {
+      if (getPowerup(PU_MAGNETFISH))
+      {
+        if (starFish[i].y < trollyFish.y) starFish[i].y++;
+        if (starFish[i].y > trollyFish.y) starFish[i].y--;
+      }
+      
       starFish[i].x += starFish[i].xSpeed;
       if (starFish[i].x < GAME_LEFT) starFish[i].resetPos();
       sprites.drawPlusMask(starFish[i].x, starFish[i].y - 1, starFish_plus_mask, 0);

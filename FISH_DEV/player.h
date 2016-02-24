@@ -3,9 +3,22 @@
 
 #include <Arduino.h>
 
+
 extern Arduboy arduboy;
 extern Sprites sprites;
 extern SimpleButtons buttons;
+
+extern byte getPowerup(byte);
+
+#define PU_SHOOTFISH    0
+#define PU_TURNFISH     1
+#define PU_STOPFISH     2
+#define PU_POPFISH      3
+//#define PU_SHOOTFISH    4
+#define PU_PROTECTFISH  4
+#define PU_LIFEFISH     5
+#define PU_SHOCKFISH    6
+#define PU_MAGNETFISH   7
 
 byte trollyFrame = 0;
 
@@ -55,7 +68,7 @@ void drawTrollyFish()
   
   if (arduboy.everyXFrames(6 / faster)) trollyFrame++;
 
-  if (trollyFrame > 3) trollyFrame = 0;
+  if (trollyFrame > 3 || getPowerup(PU_PROTECTFISH)) trollyFrame = 0;
   sprites.drawPlusMask(trollyFish.x - 6, trollyFish.y - 8, Trolly_plus_mask, trollyFrame);
 }
 
