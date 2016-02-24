@@ -12,12 +12,25 @@
 #define ENEMY_BAD               0
 #define ENEMY_JELLY             1
 #define ENEMY_EEL               2
+#define ENEMY_STAR              3 // enemy turned into starfish
+#define ENEMY_BUBBLE            4 // enemy turned into bubbles
 
 #define BURST_LENGTH            15
 #define BURST_WAIT              20
 
-extern Arduboy arduboy;
+#define PU_STARFISH     0
+#define PU_TURNFISH     1
+#define PU_STOPFISH     2
+#define PU_POPFISH      3
+//#define PU_SHOOTFISH    4
+#define PU_PROTECTFISH  4
+#define PU_LIFEFISH     5
+#define PU_SHOCKFISH    6
+#define PU_MAGNETFISH   7
 
+extern Arduboy arduboy;
+extern byte getPowerup(byte);
+extern const unsigned char starFish_plus_mask[];
 
 byte fishFrame = 0;
 
@@ -329,6 +342,9 @@ void createEnemy(byte type, byte y)
 
 void updateEnemies()
 {
+  if (getPowerup(PU_STOPFISH))  // enemies paused
+    return;
+    
   for (byte i = 0; i < MAX_ENEMIES; i++)
   {
     if (enemyFish[i].active)
@@ -356,6 +372,7 @@ void updateEnemies()
             }
           }
           break;
+          
         case ENEMY_JELLY:
           // ----- Jelly Fish -----
           // Bursts upward
@@ -393,17 +410,36 @@ void updateEnemies()
             }
           }
           break;
+          
         case ENEMY_EEL:
           // ----- Eel -----
           // Steady left movement
-          if (enemyFish[i].type == ENEMY_EEL)
+          //if (enemyFish[i].type == ENEMY_EEL)
             enemyFish[i].x +=  enemyFish[i].xSpeed;
 
           break;
+
+        case ENEMY_STAR:
+          if (getPowerup(PU_MAGNETFISH))
+          {
+            if (arduboy.everyXFrames(3))
+            {
+              if (enemyFish[i].y < trollyFish.y) enemyFish[i].y++;
+              if (enemyFish[i].y > trollyFish.y) enemyFish[i].y--;
+            }
+          }
+      
+          enemyFish[i].x -= 4;
+          break;
+
+        case ENEMY_BUBBLE:
+            enemyFish[i].y--;
+            if (enemyFish[i].y < 1) enemyFish[i].resetPos();
+            break;
       }
 
       // Outside of room, deactivate
-          if ( enemyFish[i].x < (GAME_LEFT - enemyFish[i].width))  enemyFish[i].resetPos();
+      if ( enemyFish[i].x < (GAME_LEFT - enemyFish[i].width))  enemyFish[i].resetPos();
     }
   }
 }
@@ -414,12 +450,28 @@ void drawEnemies()
   if (fishFrame > 3) fishFrame = 0;
   for (byte i = 0; i < MAX_ENEMIES; i++)
   {
-    if (enemyFish[i].type == ENEMY_BAD)
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
-    if (enemyFish[i].type == ENEMY_JELLY)
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 4, jellyFish_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
-    if (enemyFish[i].type == ENEMY_EEL)
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 3, eel_plus_mask, trollyFrame);
+    switch (enemyFish[i].type)
+    {
+      case ENEMY_BAD:
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
+      break;
+      
+      case ENEMY_JELLY:
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 4, jellyFish_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
+      break;
+      
+      case ENEMY_EEL:
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 3, eel_plus_mask, fishFrame);
+      break;
+
+      case ENEMY_STAR:
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, starFish_plus_mask, 0);
+      break;
+
+      case ENEMY_BUBBLE:
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, bubbles_plus_mask, enemyFish[i].y % 13);
+      break;
+    }
   }
 }
 

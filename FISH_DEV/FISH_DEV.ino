@@ -112,6 +112,12 @@ void loop() {
       scorePlayer = 0;
       //starFish.resetPos();
       initStarFish(0);
+      powerups = 0x00;   //No starting active powerups
+      pu_timers[PUT_STOP] = 255;        // Timer for PU_STOPFISH
+      pu_timers[PUT_PROTECT] = 255;     // Timer for PU_PROTECTFISH
+      pu_timers[PUT_SHOCK] = 255;       // Timer for PU_SHOCKFISH
+      pu_timers[PUT_MAGNET] = 255;      // Timer for PU_MAGNETFISH
+      powerUp.active = false;
       for (byte i = 0; i < MAX_ENEMIES; i++)
       {
         enemyFish[i].xSpeed = -3;
@@ -130,6 +136,7 @@ void loop() {
     case STATE_GAME_PLAYING:
       checkInputs();
       spawnWave();
+      updatePowerUp();
       updateStarFish();
       if (arduboy.everyXFrames(3)) updateEnemies();
       checkIfScored();
