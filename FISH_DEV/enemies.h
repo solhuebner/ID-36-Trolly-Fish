@@ -305,7 +305,7 @@ void createEnemy(byte type, byte y)
       enemyFish[i].xSpeed = -3;
       enemyFish[i].ySpeed = 0;
       enemyFish[i].width = 16;
-      enemyFish[i].height = 16;
+      enemyFish[i].height = 14;
       enemyFish[i].y = y;
 
       if (type == ENEMY_JELLY)
@@ -367,7 +367,7 @@ void updateEnemies()
             // Faster left movement when bursting
             enemyFish[i].x +=  enemyFish[i].xSpeed;
 
-            if (enemyFish[i].y <= 0)
+            if (enemyFish[i].y <= -4)
               enemyFish[i].burst = 1;
 
             --enemyFish[i].burst;
@@ -382,7 +382,7 @@ void updateEnemies()
 
             // Drop y
             enemyFish[i].y -= enemyFish[i].ySpeed / 2;
-            if (enemyFish[i].y > GAME_BOTTOM - enemyFish[i].height)
+            if (enemyFish[i].y > GAME_BOTTOM - (enemyFish[i].height / 2))
               enemyFish[i].burstTimer = 0;            // Reset timer when under screen
 
             if (enemyFish[i].burstTimer == 0)
@@ -415,7 +415,7 @@ void drawEnemies()
   for (byte i = 0; i < MAX_ENEMIES; i++)
   {
     if (enemyFish[i].type == ENEMY_BAD)
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, badFishy_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
+      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
     if (enemyFish[i].type == ENEMY_JELLY)
       sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 4, jellyFish_plus_mask, (trollyFrame * (min(enemyFish[i].burst, 1))));
     if (enemyFish[i].type == ENEMY_EEL)

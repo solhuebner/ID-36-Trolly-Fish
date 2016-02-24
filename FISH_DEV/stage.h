@@ -5,7 +5,7 @@
 
 
 #define MAX_ENEMIES               8
-#define SPAWN_DELAY               300
+#define SPAWN_DELAY               220
 #define SCORE_SMALL_FONT          0
 #define SCORE_BIG_FONT            1
 
@@ -15,26 +15,26 @@ extern unsigned int scorePlayer;
 extern byte eelMax;
 extern byte jellyMax;
 
-unsigned int spawnTimer = SPAWN_DELAY;
+int spawnTimer = 20;
 
 void spawnWave()
 {
   spawnTimer--;
 
-  if (spawnTimer == 0)
+  if (spawnTimer <= 0)
   {
-    spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 3));
+    spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 7));
 
     if (scorePlayer > 135)
       jellyMax = 2;
-    if (scorePlayer > 202)
+    if (scorePlayer > 400)
       eelMax = 2;
-    if (scorePlayer > 303)
+    /*if (scorePlayer > 303)
       jellyMax = 3;
     if (scorePlayer > 454)
-      jellyMax = 4;
+      jellyMax = 4;*/
 
-    if (scorePlayer > 120)
+    if (scorePlayer > 200)
       createEnemy(ENEMY_EEL, (random(3) * 28)); // Three possible eel lanes, not distruptor, just limits v movement
     if (scorePlayer > 70)
     createEnemy(ENEMY_JELLY, (random(2) * 63)); // Two possible jelly lanes, disruptors

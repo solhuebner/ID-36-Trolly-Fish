@@ -87,7 +87,7 @@ void initStarFish(byte type)
     break;
     case 1:
     {
-      byte y = random(30);
+      byte y = random(5, 48);
       // Small sin wave
       for (byte i = 0; i < MAX_STARS; ++i)
       {
