@@ -17,9 +17,10 @@ extern byte eelMax;
 extern byte jellyMax;
 
 
-#define PU_SHOOTFISH    0
-#define PU_TURNFISH     1
-#define PU_STOPFISH     2
+
+#define PU_TURNFISH     0
+#define PU_STOPFISH     1
+#define PU_SHOOTFISH    2
 #define PU_POPFISH      3
 #define PU_PROTECTFISH  4
 #define PU_LIFEFISH     5
@@ -35,6 +36,8 @@ extern void createPowerUp(byte type);
 
 int spawnTimer = 20;
 
+int pu_test = 0;
+
 void spawnWave()
 {
   if (getPowerup(PU_STOPFISH) == PU_OFF)
@@ -45,8 +48,10 @@ void spawnWave()
     spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 7));
 
     // Powerup spawns
-    //if (random(1) == 0)
-      createPowerUp(random(8));
+    //if (random(5) == 0)
+      //createPowerUp(random(8));
+      createPowerUp(pu_test % 8);
+      pu_test++;
 
     if (scorePlayer > 135)
       jellyMax = 2;
@@ -70,10 +75,7 @@ void spawnWave()
 }
 
 boolean checkGameOver()
-{
-  if (getPowerup(PU_PROTECTFISH) == PU_ON) // protected
-        return false;
-        
+{        
   Rect player = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
   Rect enemy;
   for (byte i = 0; i < MAX_ENEMIES; i++)
@@ -84,9 +86,20 @@ boolean checkGameOver()
     enemy.height = enemyFish[i].height;
     if (physics.collide(enemy, player))
     {
+      if (enemyFish[i].type == ENEMY_STAR)
+      {
+        scorePlayer++;
+        arduboy.tunes.tone(300, 40);
+        enemyFish[i].resetPos();
+        return false;
+      }
+
+      if (getPowerup(PU_PROTECTFISH)) // protected
+        return false;
+      
       if (getPowerup(PU_LIFEFISH)) // extra life
       {
-        arduboy.tunes.tone(90, 300);
+        arduboy.tunes.tone(280, 50);
         setPowerup(PU_LIFEFISH, PU_OFF);
         enemyFish[i].x -= 32;
         enemyFish[i].resetPos();
@@ -95,13 +108,6 @@ boolean checkGameOver()
 
       if (enemyFish[i].type == ENEMY_BUBBLE)
         return false;
-
-      if (enemyFish[i].type == ENEMY_STAR)
-      {
-        scorePlayer++;
-        enemyFish[i].resetPos();
-        return false;
-      }
       
       arduboy.tunes.tone(90, 300);
       delay(400);
