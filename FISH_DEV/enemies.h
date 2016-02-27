@@ -18,11 +18,10 @@
 #define BURST_LENGTH            15
 #define BURST_WAIT              20
 
-#define PU_STARFISH     0
-#define PU_TURNFISH     1
-#define PU_STOPFISH     2
+#define PU_TURNFISH     0
+#define PU_STOPFISH     1
+#define PU_SHOOTFISH    2
 #define PU_POPFISH      3
-//#define PU_SHOOTFISH    4
 #define PU_PROTECTFISH  4
 #define PU_LIFEFISH     5
 #define PU_SHOCKFISH    6
@@ -167,7 +166,6 @@ struct Enemies
     bool active;
 
     void resetPos();
-
 
 };
 
@@ -332,7 +330,7 @@ void updateEnemies()
 void drawEnemies()
 {
   if (arduboy.everyXFrames(6)) fishFrame++;
-  if (fishFrame > 3) fishFrame = 0;
+  if (fishFrame > 3 || getPowerup(PU_STOPFISH)) fishFrame = 0;
   for (byte i = 0; i < MAX_ENEMIES; i++)
   {
     switch (enemyFish[i].type)

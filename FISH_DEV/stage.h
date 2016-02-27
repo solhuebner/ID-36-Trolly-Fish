@@ -17,9 +17,10 @@ extern byte eelMax;
 extern byte jellyMax;
 
 
-#define PU_SHOOTFISH    0
-#define PU_TURNFISH     1
-#define PU_STOPFISH     2
+
+#define PU_TURNFISH     0
+#define PU_STOPFISH     1
+#define PU_SHOOTFISH    2
 #define PU_POPFISH      3
 #define PU_PROTECTFISH  4
 #define PU_LIFEFISH     5
@@ -35,6 +36,8 @@ extern void createPowerUp(byte type);
 
 int spawnTimer = 20;
 
+int pu_test = 0;
+
 void spawnWave()
 {
   if (getPowerup(PU_STOPFISH) == PU_OFF)
@@ -46,8 +49,9 @@ void spawnWave()
 
     // Powerup spawns
     //if (random(5) == 0)
-      createPowerUp(random(8));
-      //createPowerUp(PU_PROTECTFISH);
+      //createPowerUp(random(8));
+      createPowerUp(pu_test % 8);
+      pu_test++;
 
     if (scorePlayer > 135)
       jellyMax = 2;

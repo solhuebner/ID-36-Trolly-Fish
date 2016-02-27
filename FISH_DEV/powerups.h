@@ -14,11 +14,11 @@ extern Physics physics;
 #define TOTAL_TYPES 4
 #define STAR_HEIGHT 10
 
-#define GAME_LEFT               3
+#define GAME_LEFT       3
 
-#define PU_SHOOTFISH    0
-#define PU_TURNFISH     1
-#define PU_STOPFISH     2
+#define PU_TURNFISH     0
+#define PU_STOPFISH     1
+#define PU_SHOOTFISH    2
 #define PU_POPFISH      3
 #define PU_PROTECTFISH  4
 #define PU_LIFEFISH     5
@@ -142,12 +142,12 @@ void triggerPowerUp(byte type)
 {
   switch (type)
   {
-    case PU_STARFISH: arduboy.tunes.tone(300, 50);
+    case PU_SHOOTFISH: arduboy.tunes.tone(300, 50);
       break;
     case PU_TURNFISH: arduboy.tunes.tone(300, 50);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
       {
-        if (enemyFish[i].active && enemyFish[i].x < 128)
+        if (enemyFish[i].active && enemyFish[i].x < 135)
         {
           if (enemyFish[i].type == ENEMY_JELLY) numJellys--;
           if (enemyFish[i].type == ENEMY_EEL) numEels--;
@@ -162,7 +162,7 @@ void triggerPowerUp(byte type)
     case PU_POPFISH: arduboy.tunes.tone(300, 50);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
       {
-        if (enemyFish[i].active && enemyFish[i].x < 128)
+        if (enemyFish[i].active && enemyFish[i].x < 135)
         {
           if (enemyFish[i].type == ENEMY_JELLY) numJellys--;
           if (enemyFish[i].type == ENEMY_EEL) numEels--;
