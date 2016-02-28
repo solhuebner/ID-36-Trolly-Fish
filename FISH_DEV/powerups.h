@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define MAX_ENEMIES             8
+#define MAX_ENEMIES             9
 
 extern Arduboy arduboy;
 extern unsigned int scorePlayer;

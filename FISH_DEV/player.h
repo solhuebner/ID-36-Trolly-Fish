@@ -9,6 +9,12 @@ extern Sprites sprites;
 extern SimpleButtons buttons;
 
 extern byte getPowerup(byte);
+extern byte pu_timers[];
+
+#define PUT_STOP    0
+#define PUT_PROTECT 1
+#define PUT_SHOCK   2
+#define PUT_MAGNET  3
 
 #define PU_SHOOTFISH    0
 #define PU_TURNFISH     1
@@ -79,7 +85,7 @@ void drawTrollyFish()
 
   if (trollyFrame > 3 ) trollyFrame = 0;
   sprites.drawPlusMask(trollyFish.x - 6, trollyFish.y - 8, Trolly_plus_mask, trollyFrame);
-  if (getPowerup(PU_PROTECTFISH)) sprites.drawPlusMask(trollyFish.x - 6 -4, trollyFish.y - 8 -4, bigBubble_plus_mask, 0);
+  if (getPowerup(PU_PROTECTFISH) && (pu_timers[PUT_PROTECT] > 60 || pu_timers[PUT_PROTECT] % 2 == 0)) sprites.drawPlusMask(trollyFish.x - 6 -4, trollyFish.y - 8 -4, bigBubble_plus_mask, 0);
   
 }
 

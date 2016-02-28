@@ -5,8 +5,8 @@
 
 #include "enemies.h"
 
-#define MAX_ENEMIES               8
-#define SPAWN_DELAY               220
+#define MAX_ENEMIES               9
+#define SPAWN_DELAY               160
 #define SCORE_SMALL_FONT          0
 #define SCORE_BIG_FONT            1
 
@@ -45,7 +45,7 @@ void spawnWave()
 
   if (spawnTimer <= 0)
   {
-    spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 7));
+    spawnTimer = SPAWN_DELAY + (180 / (max(scorePlayer, 1) >> 7));
 
     // Powerup spawns
     //if (random(5) == 0)
@@ -56,14 +56,19 @@ void spawnWave()
     if (scorePlayer > 135)
       jellyMax = 2;
     if (scorePlayer > 400)
-      eelMax = 2;
+      eelMax = 3;
     /*if (scorePlayer > 303)
       jellyMax = 3;
     if (scorePlayer > 454)
       jellyMax = 4;*/
 
+    if (scorePlayer > 500)
+      createEnemy(ENEMY_FAST, (random(3) * 28)); // Fillers, tighten gap, faster moving
+
     if (scorePlayer > 200)
       createEnemy(ENEMY_EEL, (random(3) * 28)); // Three possible eel lanes, not distruptor, just limits v movement
+    if (scorePlayer > 1000)
+      createEnemy(ENEMY_EEL, 28); // Three possible eel lanes, not distruptor, just limits v movement
     if (scorePlayer > 70)
     createEnemy(ENEMY_JELLY, (random(2) * 63)); // Two possible jelly lanes, disruptors
 
