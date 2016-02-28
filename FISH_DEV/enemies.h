@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define MAX_ENEMIES             8
+#define MAX_ENEMIES             9
 #define GAME_LEFT               3
 
 #define GAME_TOP                3
@@ -14,6 +14,8 @@
 #define ENEMY_EEL               2
 #define ENEMY_STAR              3 // enemy turned into starfish
 #define ENEMY_BUBBLE            4 // enemy turned into bubbles
+#define ENEMY_FAST              5 // fast fish looks like bad fish but is faster
+#define ENEMY_DEAD              6 // shocked fish floats to top
 
 #define BURST_LENGTH            15
 #define BURST_WAIT              20
@@ -27,9 +29,13 @@
 #define PU_SHOCKFISH    6
 #define PU_MAGNETFISH   7
 
+#define PUT_STOP    0
+
 extern Arduboy arduboy;
 extern byte getPowerup(byte);
 extern const unsigned char starFish_plus_mask[];
+extern byte pu_timers[];
+extern unsigned int scorePlayer;
 
 byte fishFrame = 0;
 
@@ -198,16 +204,22 @@ void createEnemy(byte type, byte y)
     {
       enemyFish[i].active = true;
       enemyFish[i].type = type;
-      enemyFish[i].xSpeed = -3;
+      enemyFish[i].xSpeed = -4;
       enemyFish[i].ySpeed = 0;
       enemyFish[i].width = 16;
       enemyFish[i].height = 14;
       enemyFish[i].y = y;
 
+      if (type == ENEMY_FAST)
+      {
+        enemyFish[i].xSpeed = -3;
+        enemyFish[i].y += random(-2,2);
+      }
       if (type == ENEMY_JELLY)
       {
         enemyFish[i].ySpeed = -2;
         enemyFish[i].height = 20;
+        enemyFish[i].xSpeed = -3;
         numJellys++;
       }
       if (type == ENEMY_EEL)
@@ -253,6 +265,40 @@ void updateEnemies()
               enemyFish[i].burstTimer = BURST_WAIT;
               enemyFish[i].burst = BURST_LENGTH;
             }
+          }
+          // Shock fish to death if effect is on and within range
+          if (getPowerup(PU_SHOCKFISH) && abs(enemyFish[i].x - trollyFish.x) < 32
+              && abs(enemyFish[i].y - trollyFish.y) < 32)
+          {
+            enemyFish[i].type = ENEMY_DEAD;
+          }
+          break;
+
+          case ENEMY_FAST:
+          // ----- Fast Fishy -----
+          // Bursts forward, with pause
+          if (enemyFish[i].burst > 0)
+          {
+            // Move while bursting
+            enemyFish[i].x +=  enemyFish[i].xSpeed;
+            --enemyFish[i].burst;
+          }
+          else
+          {
+            // Decrement time before next burst
+            --enemyFish[i].burstTimer;
+            if (enemyFish[i].burstTimer == 0)
+            {
+              // Timer up, reset burst and burstTimer
+              enemyFish[i].burstTimer = BURST_WAIT >> 1;
+              enemyFish[i].burst = (BURST_LENGTH << 1) - 3;
+            }
+          }
+          // Shock fish to death if effect is on and within range
+          if (getPowerup(PU_SHOCKFISH) && abs(enemyFish[i].x - trollyFish.x) < 32
+              && abs(enemyFish[i].y - trollyFish.y) < 32)
+          {
+            enemyFish[i].type = ENEMY_DEAD;
           }
           break;
           
@@ -302,6 +348,18 @@ void updateEnemies()
 
           break;
 
+        case ENEMY_DEAD:
+        // ----- Dead Fish -----
+        // Steady up movement
+          enemyFish[i].y--;
+          if (enemyFish[i].y < -enemyFish[i].height)
+          {
+            enemyFish[i].resetPos();
+            scorePlayer++;
+          }
+
+        break;
+
         case ENEMY_STAR:
           if (getPowerup(PU_MAGNETFISH))
           {
@@ -331,29 +389,40 @@ void drawEnemies()
 {
   if (arduboy.everyXFrames(6)) fishFrame++;
   if (fishFrame > 3 || getPowerup(PU_STOPFISH)) fishFrame = 0;
-  for (byte i = 0; i < MAX_ENEMIES; i++)
+  if (pu_timers[PUT_STOP] > 40 || pu_timers[PUT_STOP] % 8 < 6)
   {
-    switch (enemyFish[i].type)
+    for (byte i = 0; i < MAX_ENEMIES; i++)
     {
-      case ENEMY_BAD:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
-      break;
-      
-      case ENEMY_JELLY:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 4, jellyFish_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
-      break;
-      
-      case ENEMY_EEL:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 3, eel_plus_mask, fishFrame);
-      break;
+      switch (enemyFish[i].type)
+      {
+        case ENEMY_BAD:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
+        break;
+  
+        case ENEMY_FAST:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
+        break;
+        
+        case ENEMY_JELLY:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 4, jellyFish_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
+        break;
+        
+        case ENEMY_EEL:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 3, eel_plus_mask, fishFrame);
+        break;
+  
+        case ENEMY_STAR:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, starFish_plus_mask, 0);
+        break;
+  
+        case ENEMY_BUBBLE:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, bubbles_plus_mask, enemyFish[i].y % 13);
+        break;
 
-      case ENEMY_STAR:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, starFish_plus_mask, 0);
-      break;
-
-      case ENEMY_BUBBLE:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, bubbles_plus_mask, enemyFish[i].y % 13);
-      break;
+        case ENEMY_DEAD:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, 1);
+        break;
+      }
     }
   }
 }

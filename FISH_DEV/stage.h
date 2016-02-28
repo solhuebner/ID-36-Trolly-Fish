@@ -5,8 +5,8 @@
 
 #include "enemies.h"
 
-#define MAX_ENEMIES               8
-#define SPAWN_DELAY               220
+#define MAX_ENEMIES               9
+#define SPAWN_DELAY               160
 #define SCORE_SMALL_FONT          0
 #define SCORE_BIG_FONT            1
 
@@ -37,6 +37,9 @@ extern void createPowerUp(byte type);
 int spawnTimer = 20;
 
 int pu_test = 0;
+int8_t laneRide = 0;
+
+int fr = 60;
 
 void spawnWave()
 {
@@ -45,30 +48,68 @@ void spawnWave()
 
   if (spawnTimer <= 0)
   {
-    spawnTimer = SPAWN_DELAY + (100 / (max(scorePlayer, 1) >> 7));
+    spawnTimer = SPAWN_DELAY + (180 / (max(scorePlayer, 1) >> 7));
 
     // Powerup spawns
-    //if (random(5) == 0)
-      //createPowerUp(random(8));
-      createPowerUp(pu_test % 8);
+    if (random(4) == 0)
+      createPowerUp(random(8));
+      //createPowerUp(pu_test % 8);
+      //createPowerUp(PU_MAGNETFISH);
       pu_test++;
 
+    if (scorePlayer > 1500 && fr == 60)
+    {
+      fr = 70;
+      arduboy.setFrameRate(70);
+    }
+    if (scorePlayer > 3000 && fr == 70)
+    {
+      fr = 80;
+      arduboy.setFrameRate(80);
+    }
+
     if (scorePlayer > 135)
-      jellyMax = 2;
+      jellyMax = 10;
     if (scorePlayer > 400)
-      eelMax = 2;
-    /*if (scorePlayer > 303)
+      eelMax = 3;
+    /*if (scorePlayer > 500)
       jellyMax = 3;
-    if (scorePlayer > 454)
+    if (scorePlayer > 600)
       jellyMax = 4;*/
+
+    if (scorePlayer > 500)
+      createEnemy(ENEMY_FAST, (random(3) * 28)); // Fillers, tighten gap, faster moving
 
     if (scorePlayer > 200)
       createEnemy(ENEMY_EEL, (random(3) * 28)); // Three possible eel lanes, not distruptor, just limits v movement
+    if (scorePlayer > 1000)
+      createEnemy(ENEMY_EEL, 28); // Three possible eel lanes, not distruptor, just limits v movement
     if (scorePlayer > 70)
-    createEnemy(ENEMY_JELLY, (random(2) * 63)); // Two possible jelly lanes, disruptors
+    {
+      byte pos = 0;
+      if (trollyFish.y < 32)
+        --laneRide;
+      else
+      {
+        ++laneRide;
+        pos = 1;
+      }
+
+      if (abs(laneRide) < 2)
+        pos = random(2);
+      else
+        laneRide = 0;
+      createEnemy(ENEMY_JELLY, (pos * 63)); // Two possible jelly lanes, disruptors
+    }
+
+    if (scorePlayer > 2000)
+      createEnemy(ENEMY_FAST, (random(3) * 28)); // Fillers, tighten gap, faster moving
 
     // There is always enough room between bad fish, jellyfish and eels are what forces a move
-    createEnemy(ENEMY_BAD, (random(3) * 28)); // Fish are fillers
+    if (scorePlayer < 1000)
+      createEnemy(ENEMY_BAD, (random(3) * 28)); // Fish are fillers
+    else
+      createEnemy(ENEMY_FAST, (random(3) * 28)); // Fish are fillers
     if (scorePlayer > 50)
       createEnemy(ENEMY_BAD, (random(3) * 28)); // Extra fillers
   }
@@ -108,7 +149,9 @@ boolean checkGameOver()
 
       if (enemyFish[i].type == ENEMY_BUBBLE)
         return false;
-      
+
+      arduboy.setFrameRate(60);
+      fr = 60;
       arduboy.tunes.tone(90, 300);
       delay(400);
       arduboy.tunes.tone(100, 100);
