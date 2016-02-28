@@ -120,7 +120,7 @@ struct PowerUp
 
 PowerUp powerUp = {
   .x = 128, .y = 32, .width = 14,
-  .height = 14, .xSpeed = -2, .ySpeed = 0,
+  .height = 14, .xSpeed = -1, .ySpeed = 0,
   .active = false, .type = 0
 };
 
@@ -136,7 +136,7 @@ void createPowerUp(byte type)
   }
 
   powerUp.active = true;
-  powerUp.x = 128;
+  powerUp.x = 148;
   powerUp.y = random(4, 50);
   powerUp.type = type;
 }
@@ -155,11 +155,11 @@ void triggerPowerUp(byte type)
         {
           if (enemyFish[i].type == ENEMY_JELLY) numJellys--;
           if (enemyFish[i].type == ENEMY_EEL) numEels--;
-          //enemyFish[i].type = ENEMY_STAR;
-          enemyFish[i].resetPos();
+         
           createStar(enemyFish[i].x, enemyFish[i].y + 3);
           createStar(enemyFish[i].x + 6, enemyFish[i].y);
           createStar(enemyFish[i].x + 3, enemyFish[i].y + 6);
+          enemyFish[i].resetPos();
         }
       }
       break;
@@ -229,7 +229,8 @@ void updatePowerUp()
   {
     powerUp.x += powerUp.xSpeed;
     if (powerUp.x < GAME_LEFT) powerUp.active = false;
-    sprites.drawPlusMask(powerUp.x, powerUp.y - 1, powerUps_plus_mask, powerUp.type);
+    if (powerUp.x % 18 < 9)
+      sprites.drawPlusMask(powerUp.x, powerUp.y - 1, powerUps_plus_mask, powerUp.type);
 
     Rect playerRect = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
 
@@ -298,14 +299,16 @@ void GameObject::resetPos()
   }
 }
 
-void createStar(byte x, byte y)
+// Create a bonus star
+// Used when enemy is turned into a star
+void createStar(byte _x, byte _y)
 {
-  for (byte i = 0; i < TOTAL_STARS; ++i)
+  for (byte i = MAX_STARS; i < TOTAL_STARS; ++i)
   {
     if (starFish[i].active == false)
     {
-      starFish[i].x = x;
-      starFish[i].y = y;
+      starFish[i].x = _x;
+      starFish[i].y = _y;
       starFish[i].width = 8;
       starFish[i].height = STAR_HEIGHT;
       starFish[i].xSpeed = -2;
@@ -412,7 +415,7 @@ void updateStarFish()
   {
     if (starFish[i].active)
     {
-      if (getPowerup(PU_MAGNETFISH))
+      if (getPowerup(PU_MAGNETFISH) || i >= MAX_STARS)
       {
         if (arduboy.everyXFrames(2) && abs(trollyFish.x - starFish[i].x) < 32)
         {

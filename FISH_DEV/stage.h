@@ -51,6 +51,7 @@ void spawnWave()
     //if (random(5) == 0)
       //createPowerUp(random(8));
       createPowerUp(pu_test % 8);
+      //createPowerUp(PU_TURNFISH);
       pu_test++;
 
     if (scorePlayer > 135)
