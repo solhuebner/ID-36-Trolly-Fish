@@ -28,9 +28,12 @@
 #define PU_SHOCKFISH    6
 #define PU_MAGNETFISH   7
 
+#define PUT_STOP    0
+
 extern Arduboy arduboy;
 extern byte getPowerup(byte);
 extern const unsigned char starFish_plus_mask[];
+extern byte pu_timers[];
 
 byte fishFrame = 0;
 
@@ -360,33 +363,36 @@ void drawEnemies()
 {
   if (arduboy.everyXFrames(6)) fishFrame++;
   if (fishFrame > 3 || getPowerup(PU_STOPFISH)) fishFrame = 0;
-  for (byte i = 0; i < MAX_ENEMIES; i++)
+  if (pu_timers[PUT_STOP] > 60 || pu_timers[PUT_STOP] % 2 == 0)
   {
-    switch (enemyFish[i].type)
+    for (byte i = 0; i < MAX_ENEMIES; i++)
     {
-      case ENEMY_BAD:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
-      break;
-
-      case ENEMY_FAST:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
-      break;
-      
-      case ENEMY_JELLY:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 4, jellyFish_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
-      break;
-      
-      case ENEMY_EEL:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 3, eel_plus_mask, fishFrame);
-      break;
-
-      case ENEMY_STAR:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, starFish_plus_mask, 0);
-      break;
-
-      case ENEMY_BUBBLE:
-      sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, bubbles_plus_mask, enemyFish[i].y % 13);
-      break;
+      switch (enemyFish[i].type)
+      {
+        case ENEMY_BAD:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
+        break;
+  
+        case ENEMY_FAST:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
+        break;
+        
+        case ENEMY_JELLY:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 4, jellyFish_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))));
+        break;
+        
+        case ENEMY_EEL:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 3, eel_plus_mask, fishFrame);
+        break;
+  
+        case ENEMY_STAR:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, starFish_plus_mask, 0);
+        break;
+  
+        case ENEMY_BUBBLE:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, bubbles_plus_mask, enemyFish[i].y % 13);
+        break;
+      }
     }
   }
 }
