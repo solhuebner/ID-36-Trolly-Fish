@@ -10,9 +10,10 @@ extern unsigned int scorePlayer;
 extern Physics physics;
 //extern Player trollyFish;
 
-#define MAX_STARS   8
-#define TOTAL_TYPES 4
-#define STAR_HEIGHT 10
+#define MAX_STARS     8   // Maximum regular stars
+#define TOTAL_STARS   MAX_STARS + (MAX_ENEMIES * 3)  // Total initialized stars, including enemies turned
+#define TOTAL_TYPES   4
+#define STAR_HEIGHT   10
 
 #define GAME_LEFT       3
 
@@ -86,6 +87,9 @@ PROGMEM const unsigned char powerUps_plus_mask[] = {
 0x0F, 0x0F, 0x07, 0x0F, 0x03, 0x07, 0x01, 0x03, 0x00, 0x01, 0x00, 0x00, 
 };
 
+// Function prototypes
+void createStar(byte, byte);
+
 
 // Total of 8 powerups, 1 byte of flags
 byte powerups = 0x00;   //Active powerups
@@ -151,7 +155,11 @@ void triggerPowerUp(byte type)
         {
           if (enemyFish[i].type == ENEMY_JELLY) numJellys--;
           if (enemyFish[i].type == ENEMY_EEL) numEels--;
-          enemyFish[i].type = ENEMY_STAR;
+          //enemyFish[i].type = ENEMY_STAR;
+          enemyFish[i].resetPos();
+          createStar(enemyFish[i].x, enemyFish[i].y + 3);
+          createStar(enemyFish[i].x + 6, enemyFish[i].y);
+          createStar(enemyFish[i].x + 3, enemyFish[i].y + 6);
         }
       }
       break;
@@ -258,12 +266,13 @@ struct GameObject
     byte width, height;
     byte xSpeed, ySpeed;
     bool active;
+    byte id;
 
     void resetPos();
 
 };
 
-GameObject starFish[MAX_STARS]; // = {.x = 128, .y = 32, .width = 7, .height = 7, .xSpeed = -2, .ySpeed = 0};
+GameObject starFish[TOTAL_STARS]; // = {.x = 128, .y = 32, .width = 7, .height = 7, .xSpeed = -2, .ySpeed = 0};
 
 void GameObject::resetPos()
 {
@@ -271,7 +280,7 @@ void GameObject::resetPos()
   //y = 10 * random(1, 6);
   x += 128;
   
-  if (cycles > 0)
+  if (cycles > 0 && id < MAX_STARS)
     --cycles;
   else
     active = false;
@@ -289,6 +298,40 @@ void GameObject::resetPos()
   }
 }
 
+void createStar(byte x, byte y)
+{
+  for (byte i = 0; i < TOTAL_STARS; ++i)
+  {
+    if (starFish[i].active == false)
+    {
+      starFish[i].x = x;
+      starFish[i].y = y;
+      starFish[i].width = 8;
+      starFish[i].height = STAR_HEIGHT;
+      starFish[i].xSpeed = -2;
+      starFish[i].ySpeed = 0;
+      starFish[i].active = true;
+      starFish[i].id = i;
+
+      break;
+    }
+  }
+}
+
+void startStarFish()
+{
+  for (byte i = 0; i < TOTAL_STARS; ++i)
+  {
+    starFish[i].x = 128;
+    starFish[i].y = 0;
+    starFish[i].width = 8;
+    starFish[i].height = STAR_HEIGHT;
+    starFish[i].xSpeed = -2;
+    starFish[i].ySpeed = 0;
+    starFish[i].active = false;
+  }
+}
+
 void initStarFish(byte type)
 {
   switch (type)
@@ -300,10 +343,10 @@ void initStarFish(byte type)
       {
         starFish[i].x = 120 + (128 / MAX_STARS * i);
         starFish[i].y = SIN_Y[i] - 12;
-        starFish[i].width = 8;
-        starFish[i].height = STAR_HEIGHT;
-        starFish[i].xSpeed = -2;
-        starFish[i].ySpeed = 0;
+        //starFish[i].width = 8;
+        //starFish[i].height = STAR_HEIGHT;
+        //starFish[i].xSpeed = -2;
+       // starFish[i].ySpeed = 0;
         starFish[i].active = true;
         cycles = 3 * MAX_STARS;
       }
@@ -317,10 +360,10 @@ void initStarFish(byte type)
       {
         starFish[i].x = 120 + (128 / MAX_STARS * i);
         starFish[i].y = (SIN_Y[i] / 3) - 12 + y;
-        starFish[i].width = 8;
-        starFish[i].height = STAR_HEIGHT;
-        starFish[i].xSpeed = -2;
-        starFish[i].ySpeed = 0;
+        //starFish[i].width = 8;
+        //starFish[i].height = STAR_HEIGHT;
+        //starFish[i].xSpeed = -2;
+        //starFish[i].ySpeed = 0;
         starFish[i].active = true;
         cycles = 3 * MAX_STARS;
       }
@@ -334,10 +377,10 @@ void initStarFish(byte type)
       {
         starFish[i].x = 120 + (128 / MAX_STARS * i);
         starFish[i].y = y;
-        starFish[i].width = 8;
-        starFish[i].height = STAR_HEIGHT;
-        starFish[i].xSpeed = -2;
-        starFish[i].ySpeed = 0;
+        //starFish[i].width = 8;
+        //starFish[i].height = STAR_HEIGHT;
+        //starFish[i].xSpeed = -2;
+        //starFish[i].ySpeed = 0;
         starFish[i].active = true;
         cycles = 1 * MAX_STARS;
       }
@@ -351,10 +394,10 @@ void initStarFish(byte type)
       {
         starFish[i].x = 120 + ((i % 4) * 8);
         starFish[i].y = y + ((i / 4) * 8);
-        starFish[i].width = 8;
-        starFish[i].height = STAR_HEIGHT;
-        starFish[i].xSpeed = -2;
-        starFish[i].ySpeed = 0;
+        //starFish[i].width = 8;
+        //starFish[i].height = STAR_HEIGHT;
+        //starFish[i].xSpeed = -2;
+        //starFish[i].ySpeed = 0;
         starFish[i].active = true;
         cycles = 0 * MAX_STARS;
       }
@@ -365,7 +408,7 @@ void initStarFish(byte type)
 
 void updateStarFish()
 {
-  for (byte i = 0; i < MAX_STARS; ++i)
+  for (byte i = 0; i < TOTAL_STARS; ++i)
   {
     if (starFish[i].active)
     {
@@ -399,7 +442,7 @@ void updateStarFish()
 void checkIfScored() {
   Rect playerRect = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
 
-  for (byte i = 0; i < MAX_STARS; ++i)
+  for (byte i = 0; i < TOTAL_STARS; ++i)
   {
     Rect starFishPoint = {.x = starFish[i].x, .y = starFish[i].y, .width = starFish[i].width, starFish[i].height};
   

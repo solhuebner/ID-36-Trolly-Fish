@@ -111,6 +111,7 @@ void loop() {
     case STATE_MENU_PLAY:
       scorePlayer = 0;
       //starFish.resetPos();
+      startStarFish();
       initStarFish(0);
       powerups = 0x00;   //No starting active powerups
       pu_timers[PUT_STOP] = 255;        // Timer for PU_STOPFISH
