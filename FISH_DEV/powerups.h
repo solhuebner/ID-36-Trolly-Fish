@@ -373,8 +373,19 @@ void updateStarFish()
       {
         if (arduboy.everyXFrames(2) && abs(trollyFish.x - starFish[i].x) < 32)
         {
-          if (starFish[i].y < trollyFish.y) starFish[i].y += 2;
-          if (starFish[i].y > trollyFish.y) starFish[i].y -= 2;
+          // Y magnet
+          if (starFish[i].y < trollyFish.y) starFish[i].y++;
+          if (starFish[i].y > trollyFish.y) starFish[i].y--;
+
+          // X magnet
+          if (starFish[i].x < trollyFish.x) starFish[i].x++;
+          if (starFish[i].x > trollyFish.x) starFish[i].x--;
+        }
+        if (arduboy.everyXFrames(2) && abs(trollyFish.x - starFish[i].x) < 42)
+        {
+          // Y magnet further out
+          if (starFish[i].y < trollyFish.y) starFish[i].y++;
+          if (starFish[i].y > trollyFish.y) starFish[i].y--;
         }
       }
       
