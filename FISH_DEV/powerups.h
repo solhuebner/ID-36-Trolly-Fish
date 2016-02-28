@@ -130,13 +130,13 @@ void createPowerUp(byte type)
     return;
     
   // No duplicates on timed or consumed powerups
-  while (getPowerup(type))
+  /*while (getPowerup(type))
   {
     type = (++type) % 8;
-  }
+  }*/
 
   powerUp.active = true;
-  powerUp.x = 148;
+  powerUp.x = 158;
   powerUp.y = random(4, 50);
   powerUp.type = type;
 }
@@ -185,7 +185,7 @@ void triggerPowerUp(byte type)
     case PU_LIFEFISH: arduboy.tunes.tone(280, 50);
       setPowerup(type, PU_ON);
       break;
-    case PU_SHOCKFISH: arduboy.tunes.tone(300, 50);
+    case PU_SHOCKFISH: arduboy.tunes.tone(250, 50);
       setPowerup(type, PU_ON);
       pu_timers[PUT_SHOCK] = 255;
       break;
@@ -229,7 +229,7 @@ void updatePowerUp()
   {
     powerUp.x += powerUp.xSpeed;
     if (powerUp.x < GAME_LEFT) powerUp.active = false;
-    if (powerUp.x % 18 < 9)
+    if (powerUp.x % 24 < 18)
       sprites.drawPlusMask(powerUp.x, powerUp.y - 1, powerUps_plus_mask, powerUp.type);
 
     Rect playerRect = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};

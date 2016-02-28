@@ -15,6 +15,7 @@
 #define ENEMY_STAR              3 // enemy turned into starfish
 #define ENEMY_BUBBLE            4 // enemy turned into bubbles
 #define ENEMY_FAST              5 // fast fish looks like bad fish but is faster
+#define ENEMY_DEAD              6 // shocked fish floats to top
 
 #define BURST_LENGTH            15
 #define BURST_WAIT              20
@@ -34,6 +35,7 @@ extern Arduboy arduboy;
 extern byte getPowerup(byte);
 extern const unsigned char starFish_plus_mask[];
 extern byte pu_timers[];
+extern unsigned int scorePlayer;
 
 byte fishFrame = 0;
 
@@ -264,6 +266,12 @@ void updateEnemies()
               enemyFish[i].burst = BURST_LENGTH;
             }
           }
+          // Shock fish to death if effect is on and within range
+          if (getPowerup(PU_SHOCKFISH) && abs(enemyFish[i].x - trollyFish.x) < 32
+              && abs(enemyFish[i].y - trollyFish.y) < 32)
+          {
+            enemyFish[i].type = ENEMY_DEAD;
+          }
           break;
 
           case ENEMY_FAST:
@@ -283,8 +291,14 @@ void updateEnemies()
             {
               // Timer up, reset burst and burstTimer
               enemyFish[i].burstTimer = BURST_WAIT >> 1;
-              enemyFish[i].burst = BURST_LENGTH << 1;
+              enemyFish[i].burst = (BURST_LENGTH << 1) - 3;
             }
+          }
+          // Shock fish to death if effect is on and within range
+          if (getPowerup(PU_SHOCKFISH) && abs(enemyFish[i].x - trollyFish.x) < 32
+              && abs(enemyFish[i].y - trollyFish.y) < 32)
+          {
+            enemyFish[i].type = ENEMY_DEAD;
           }
           break;
           
@@ -334,6 +348,18 @@ void updateEnemies()
 
           break;
 
+        case ENEMY_DEAD:
+        // ----- Dead Fish -----
+        // Steady up movement
+          enemyFish[i].y--;
+          if (enemyFish[i].y < -enemyFish[i].height)
+          {
+            enemyFish[i].resetPos();
+            scorePlayer++;
+          }
+
+        break;
+
         case ENEMY_STAR:
           if (getPowerup(PU_MAGNETFISH))
           {
@@ -363,7 +389,7 @@ void drawEnemies()
 {
   if (arduboy.everyXFrames(6)) fishFrame++;
   if (fishFrame > 3 || getPowerup(PU_STOPFISH)) fishFrame = 0;
-  if (pu_timers[PUT_STOP] > 60 || pu_timers[PUT_STOP] % 2 == 0)
+  if (pu_timers[PUT_STOP] > 40 || pu_timers[PUT_STOP] % 8 < 6)
   {
     for (byte i = 0; i < MAX_ENEMIES; i++)
     {
@@ -391,6 +417,10 @@ void drawEnemies()
   
         case ENEMY_BUBBLE:
         sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y, bubbles_plus_mask, enemyFish[i].y % 13);
+        break;
+
+        case ENEMY_DEAD:
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, 1);
         break;
       }
     }

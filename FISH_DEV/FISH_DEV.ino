@@ -114,10 +114,10 @@ void loop() {
       startStarFish();
       initStarFish(0);
       powerups = 0x00;   //No starting active powerups
-      pu_timers[PUT_STOP] = 255;        // Timer for PU_STOPFISH
-      pu_timers[PUT_PROTECT] = 255;     // Timer for PU_PROTECTFISH
-      pu_timers[PUT_SHOCK] = 255;       // Timer for PU_SHOCKFISH
-      pu_timers[PUT_MAGNET] = 255;      // Timer for PU_MAGNETFISH
+      pu_timers[PUT_STOP] = 0;        // Timer for PU_STOPFISH
+      pu_timers[PUT_PROTECT] = 0;     // Timer for PU_PROTECTFISH
+      pu_timers[PUT_SHOCK] = 0;       // Timer for PU_SHOCKFISH
+      pu_timers[PUT_MAGNET] = 0;      // Timer for PU_MAGNETFISH
       powerUp.active = false;
       for (byte i = 0; i < MAX_ENEMIES; i++)
       {
