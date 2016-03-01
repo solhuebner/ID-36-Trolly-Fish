@@ -12,7 +12,6 @@ We need a good balance between stars to catch and enemies.
 * 8 powerups (fits exact 1 byte)
 
 ## FISH LIST
-
 | **SPRITE** | **SIZE** | **FRAMES** | **NAME** | **HP** | **SWIMMING** |
 | ---        | ---      | ---        | ---      | ---    | ---          |
 | **Trolly Fish** | 16x16 | 4 | trollyFish_16x16 | 1 or 2| 
@@ -34,7 +33,6 @@ We need a good balance between stars to catch and enemies.
 | **magnetFish** | 12x12 | 1 | yes | all stars get pulled towards the player |
 
 ## COMBINATION LIST
-
 |             | **turn** | **stop** | **pop** | **shoot** | **protect** | **life** | **shock** | **magnet** |
 | ---         | ---      | ---      | ---     | ---       | ---         | ---      | ---       | ---        |
 | **turn**    |          | V        |         | V         |             | V        |           | V          |
