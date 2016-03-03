@@ -27,8 +27,21 @@ We need a good balance between stars to catch and enemies.
 | **turnFish** | 12x12 | 1 | | all enemies on screen turn into stars |
 | **stopFish** | 12x12 | 1 | yes | all enemies stop swimming, but stars and power-ups keep coming |
 | **popFish** | 12x12 | 1 | | all enemies on screen pop like bubbles |
-| **shootFish** | 12x12 | 1 | | player gets 3 bubbles he can shoot with to kill enemies |
+| **shootFish** | 12x12 | 1 | yes | player can shoot 1 enemie at a time |
 | **protectFish** | 12x12 | 1 | yes | player is in a protective bubble |
 | **lifeFish** | 12x12 | 1 | | player get's 1 continue, automaticly used when player dies |
 | **shockFish** | 12x12 | 1 | yes | player can shock all fish for extra points |
 | **magnetFish** | 12x12 | 1 | yes | all stars get pulled towards the player |
+
+## COMBINATION LIST
+
+|             | **turn** | **stop** | **pop** | **shoot** | **protect** | **life** | **shock** | **magnet** |
+| ---         | ---      | ---      | ---     | ---       | ---         | ---      | ---       | ---        |
+| **turn**    |          | V        |         | V         |             | V        |           | V          |
+| **stop**    | V        |          |         |           |             | V        |           | V          |
+| **pop**     |          |          |         | V         |             | V        | V         | V          |
+| **shoot**   | V        |          | V       |           |             | V        |           | V          |
+| **protect** |          |          |         |           |             | V        |           | V          |
+| **life**    | V        | V        | V       | V         | V           |          | V         | V          |
+| **shock**   |          |          | V       |           |             | V        |           | V          |
+| **magnet**  | V        | V        | V       | V         | V           | V        | V         |            |
