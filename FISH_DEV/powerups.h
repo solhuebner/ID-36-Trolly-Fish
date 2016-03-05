@@ -9,6 +9,7 @@ extern Arduboy arduboy;
 extern unsigned int scorePlayer;
 extern Physics physics;
 //extern Player trollyFish;
+extern void giveBonus(int8_t, int8_t, byte);
 
 #define MAX_STARS     8   // Maximum regular stars
 #define TOTAL_STARS   MAX_STARS + (MAX_ENEMIES * 3)  // Total initialized stars, including enemies turned
@@ -172,9 +173,11 @@ void triggerPowerUp(byte type)
       {
         if (enemyFish[i].active && enemyFish[i].x < 135)
         {
-          if (enemyFish[i].type == ENEMY_JELLY) numJellys--;
-          if (enemyFish[i].type == ENEMY_EEL) numEels--;
+          byte a = 1;
+          if (enemyFish[i].type == ENEMY_JELLY) { numJellys--; a = 2; }
+          if (enemyFish[i].type == ENEMY_EEL) { numEels--; a = 4; }
           enemyFish[i].type = ENEMY_BUBBLE;
+          giveBonus(enemyFish[i].x, enemyFish[i].y + 8, a);
         }
       }
       break;
@@ -183,6 +186,8 @@ void triggerPowerUp(byte type)
       pu_timers[PUT_PROTECT] = 255;
       break;
     case PU_LIFEFISH: arduboy.tunes.tone(280, 50);
+      if (getPowerup(PU_LIFEFISH))
+        giveBonus(trollyFish.x, trollyFish.y, 5);
       setPowerup(type, PU_ON);
       break;
     case PU_SHOCKFISH: arduboy.tunes.tone(250, 50);
@@ -258,6 +263,7 @@ const byte SIN_Y[] = {
 void initStarFish(byte type);
 
 byte cycles = 3;
+byte streak = 0;
 
 struct GameObject
 {
@@ -323,6 +329,8 @@ void createStar(byte _x, byte _y)
 
 void startStarFish()
 {
+  streak = 0;
+  
   for (byte i = 0; i < TOTAL_STARS; ++i)
   {
     starFish[i].x = 128;
@@ -436,7 +444,11 @@ void updateStarFish()
       }
       
       starFish[i].x += starFish[i].xSpeed;
-      if (starFish[i].x < GAME_LEFT) starFish[i].resetPos();
+      if (starFish[i].x < GAME_LEFT)
+      {
+        starFish[i].resetPos();
+        streak = 0;
+      }
       sprites.drawPlusMask(starFish[i].x, starFish[i].y - 1, starFish_plus_mask, 0);
     }
   }
@@ -449,10 +461,17 @@ void checkIfScored() {
   {
     Rect starFishPoint = {.x = starFish[i].x, .y = starFish[i].y, .width = starFish[i].width, starFish[i].height};
   
-    if (physics.collide(starFishPoint, playerRect)) {
+    if (physics.collide(starFishPoint, playerRect))
+    {
       arduboy.tunes.tone(300, 40);
       scorePlayer++;
       starFish[i].resetPos();
+      ++streak;
+      if (streak >= 8)
+      {
+        giveBonus(trollyFish.x + 8, trollyFish.y, 1);
+        streak = 0;
+      }
     }
   }
 }

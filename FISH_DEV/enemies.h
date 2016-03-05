@@ -36,6 +36,7 @@ extern byte getPowerup(byte);
 extern const unsigned char starFish_plus_mask[];
 extern byte pu_timers[];
 extern unsigned int scorePlayer;
+extern void giveBonus(int8_t, int8_t, byte);
 
 byte fishFrame = 0;
 
@@ -225,7 +226,7 @@ void createEnemy(byte type, byte y)
       if (type == ENEMY_EEL)
       {
         enemyFish[i].xSpeed = -2;
-        enemyFish[i].width = 80;
+        enemyFish[i].width = 76;
         enemyFish[i].height = 10;
         numEels++;
       }
@@ -271,6 +272,7 @@ void updateEnemies()
               && abs(enemyFish[i].y - trollyFish.y) < 32)
           {
             enemyFish[i].type = ENEMY_DEAD;
+            giveBonus(enemyFish[i].x, enemyFish[i].y, 1);
           }
           break;
 
@@ -299,6 +301,7 @@ void updateEnemies()
               && abs(enemyFish[i].y - trollyFish.y) < 32)
           {
             enemyFish[i].type = ENEMY_DEAD;
+            giveBonus(enemyFish[i].x, enemyFish[i].y, 2);
           }
           break;
           

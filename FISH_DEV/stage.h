@@ -120,7 +120,7 @@ PROGMEM const unsigned char numbersBig[] = {
 PROGMEM const unsigned char hudAssets_plus_mask[] = {
 // width, height
 8, 8,
-// power up turnFish
+// power up stopFish
 0x1C, 0x3E, 0x22, 0x7F, 0x41, 0xFF, 0x4D, 0xFF, 
 0x49, 0xFF, 0x22, 0x7F, 0x1C, 0x3E, 0x00, 0x1C, 
 // power up shootFish
@@ -159,6 +159,9 @@ PROGMEM const unsigned char bonusPoints_plus_mask[] = {
 0x00, 0x1C, 0x08, 0x3E, 0x1C, 0x3E, 0x08, 0x3E, 0x00, 0x7F, 0x2E, 0x7F, 0x2A, 0x7F, 0x3A, 0x7F, 0x00, 
 0x7F, 0x3E, 0x7F, 0x22, 0x7F, 0x3E, 0x7F, 0x00, 0x7F, 0x3E, 0x7F, 0x22, 0x7F, 0x3E, 0x7F, 0x00, 0x7F, 
 };
+
+
+#define LANEOFFSET 4
 
 int spawnTimer = 20;
 int pu_test = 0;
@@ -202,12 +205,12 @@ void spawnWave()
       jellyMax = 4;*/
 
     if (scorePlayer > 500)
-      createEnemy(ENEMY_FAST, (random(3) * 28)); // Fillers, tighten gap, faster moving
+      createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fillers, tighten gap, faster moving
 
     if (scorePlayer > 200)
-      createEnemy(ENEMY_EEL, (random(3) * 28)); // Three possible eel lanes, not distruptor, just limits v movement
+      createEnemy(ENEMY_EEL, (random(3) * 28) + LANEOFFSET); // Three possible eel lanes, not distruptor, just limits v movement
     if (scorePlayer > 1000)
-      createEnemy(ENEMY_EEL, 28); // Three possible eel lanes, not distruptor, just limits v movement
+      createEnemy(ENEMY_EEL, 28 + LANEOFFSET); // Three possible eel lanes, not distruptor, just limits v movement
     if (scorePlayer > 70)
     {
       byte pos = 0;
@@ -223,19 +226,19 @@ void spawnWave()
         pos = random(2);
       else
         laneRide = 0;
-      createEnemy(ENEMY_JELLY, (pos * 63)); // Two possible jelly lanes, disruptors
+      createEnemy(ENEMY_JELLY, (pos * 63) + LANEOFFSET); // Two possible jelly lanes, disruptors
     }
 
     if (scorePlayer > 2000)
-      createEnemy(ENEMY_FAST, (random(3) * 28)); // Fillers, tighten gap, faster moving
+      createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fillers, tighten gap, faster moving
 
     // There is always enough room between bad fish, jellyfish and eels are what forces a move
     if (scorePlayer < 1000)
-      createEnemy(ENEMY_BAD, (random(3) * 28)); // Fish are fillers
+      createEnemy(ENEMY_BAD, (random(3) * 28) + LANEOFFSET); // Fish are fillers
     else
-      createEnemy(ENEMY_FAST, (random(3) * 28)); // Fish are fillers
+      createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fish are fillers
     if (scorePlayer > 50)
-      createEnemy(ENEMY_BAD, (random(3) * 28)); // Extra fillers
+      createEnemy(ENEMY_BAD, (random(3) * 28) + LANEOFFSET); // Extra fillers
   }
 }
 
@@ -251,13 +254,13 @@ boolean checkGameOver()
     enemy.height = enemyFish[i].height;
     if (physics.collide(enemy, player))
     {
-      if (enemyFish[i].type == ENEMY_STAR)
+      /*if (enemyFish[i].type == ENEMY_STAR)
       {
         scorePlayer++;
         arduboy.tunes.tone(300, 40);
         enemyFish[i].resetPos();
         return false;
-      }
+      }*/
 
       if (getPowerup(PU_PROTECTFISH)) // protected
         return false;
@@ -271,7 +274,7 @@ boolean checkGameOver()
         return false;
       }
 
-      if (enemyFish[i].type == ENEMY_BUBBLE)
+      if (enemyFish[i].type == ENEMY_BUBBLE || enemyFish[i].type == ENEMY_DEAD)
         return false;
 
       arduboy.setFrameRate(60);
@@ -341,6 +344,108 @@ void drawScore(byte scoreX, byte scoreY, byte fontType)
       case SCORE_BIG_FONT:
         sprites.drawSelfMasked(scoreX + (pad * 18) + (18 * i), scoreY, numbersBig, digit);
         break;
+    }
+  }
+}
+
+void drawPowerUps()
+{
+  byte offset = 0;
+
+  if (getPowerup(PU_STOPFISH))
+  {
+    sprites.drawPlusMask(1, 1, hudAssets_plus_mask, 0);
+    offset += 8;
+  }
+
+  if (getPowerup(PU_SHOOTFISH))
+  {
+    sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 1);
+    offset += 8;
+  }
+  
+  if (getPowerup(PU_PROTECTFISH))
+  {
+    sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 2);
+    offset += 8;
+  }
+
+  if (getPowerup(PU_LIFEFISH))
+  {
+    sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 3);
+    offset += 8;
+  }
+
+  if (getPowerup(PU_SHOCKFISH))
+  {
+    sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 4);
+    offset += 8;
+  }
+
+  if (getPowerup(PU_MAGNETFISH))
+  {
+    sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 5);
+    offset += 8;
+  }
+}
+
+struct Bonus
+{
+  int8_t x, y;
+  byte amount;
+  bool active;
+};
+
+Bonus bonus[MAX_ENEMIES];
+byte numBonus = 0;
+
+void initBonuses()
+{
+  for (byte i = 0; i < MAX_ENEMIES; ++i)
+  {
+    bonus[i].x = 0;
+    bonus[i].y = 0;
+    bonus[i].amount = 0;
+    bonus[i].active = false;
+  }
+}
+
+void giveBonus(int8_t x, int8_t y, byte amount)
+{
+  scorePlayer += amount * 10;
+  for (byte i = 0; i < MAX_ENEMIES; ++i)
+  {
+    if (bonus[i].active == false)
+    {
+      bonus[i].active = true;
+      bonus[i].x = x;
+      bonus[i].y = y;
+      bonus[i].amount = amount;
+      ++numBonus;
+
+      break;
+    }
+  }
+}
+
+void updateBonus()
+{
+  if (numBonus > 0 && arduboy.everyXFrames(2))
+  {
+    for (byte i = 0; i < MAX_ENEMIES; ++i)
+    {
+      if (bonus[i].active)
+      {
+        --bonus[i].y;
+        
+        sprites.drawPlusMask(bonus[i].x, bonus[i].y, bonusPoints_plus_mask, bonus[i].amount - 1);
+
+        if (bonus[i].y < 0)
+        {
+          bonus[i].active = false;
+          --numBonus;
+        }
+      }
     }
   }
 }

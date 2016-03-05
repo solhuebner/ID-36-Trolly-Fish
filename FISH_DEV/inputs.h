@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-#define GAME_TOP                5
-#define GAME_BOTTOM             57
+#define GAME_TOP                8
+#define GAME_BOTTOM             60
 #define GAME_LEFT               3
 #define GAME_RIGHT              112
 #define STATE_GAME_PAUSE        9
