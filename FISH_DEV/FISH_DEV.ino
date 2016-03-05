@@ -111,8 +111,10 @@ void loop() {
     case STATE_MENU_PLAY:
       scorePlayer = 0;
       //starFish.resetPos();
+      fr = 60;
       startStarFish();
       initStarFish(0);
+      initBonuses();
       powerups = 0x00;   //No starting active powerups
       pu_timers[PUT_STOP] = 0;        // Timer for PU_STOPFISH
       pu_timers[PUT_PROTECT] = 0;     // Timer for PU_PROTECTFISH
@@ -139,11 +141,13 @@ void loop() {
       spawnWave();
       updatePowerUp();
       updateStarFish();
+      updateBonus();
       if (arduboy.everyXFrames(3)) updateEnemies();
       checkIfScored();
       drawTrollyFish();
       drawEnemies();
       drawScore(64,0,0);
+      drawPowerUps();
       if (checkGameOver())gameState = STATE_GAME_OVER;
       break;
     case STATE_GAME_OVER:
