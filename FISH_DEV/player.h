@@ -81,7 +81,7 @@ struct Player
     byte xSpeed, ySpeed;
 };
 
-Player trollyFish = {.x = 20, .y = 32, .width = 2, .height = 4, .xSpeed = 1, .ySpeed = 2};
+Player trollyFish = {.x = 20, .y = 32, .width = 2, .height = 4, .xSpeed = 1, .ySpeed = 1};
 
 void drawTrollyFish()
 {
