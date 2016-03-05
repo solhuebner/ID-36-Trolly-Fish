@@ -7,7 +7,7 @@
 #define GAME_LEFT               3
 
 #define GAME_TOP                3
-#define GAME_BOTTOM             54
+#define GAME_BOTTOM             58
 
 #define ENEMY_BAD               0
 #define ENEMY_JELLY             1
@@ -228,6 +228,7 @@ void createEnemy(byte type, byte y)
         enemyFish[i].xSpeed = -2;
         enemyFish[i].width = 76;
         enemyFish[i].height = 10;
+        enemyFish[i].x = 144;
         numEels++;
       }
 

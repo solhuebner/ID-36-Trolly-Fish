@@ -162,6 +162,14 @@ PROGMEM const unsigned char bonusPoints_plus_mask[] = {
 
 
 #define LANEOFFSET 4
+#define JELLYSPAWN  400
+#define JELLYSPAWN2 800
+#define JELLYSPAWN3 1200
+#define EELSPAWN    200
+#define EELSPAWN2   400
+#define EELSPAWN3   1000
+#define FASTSPAWN   500
+#define FASTSPAWN2  1000
 
 int spawnTimer = 20;
 int pu_test = 0;
@@ -175,7 +183,7 @@ void spawnWave()
 
   if (spawnTimer <= 0)
   {
-    spawnTimer = SPAWN_DELAY + (180 / (max(scorePlayer, 1) >> 7));
+    spawnTimer = SPAWN_DELAY + (180 / max(scorePlayer >> 8, 1));
 
     // Powerup spawns
     if (random(4) == 0)
@@ -195,23 +203,23 @@ void spawnWave()
       arduboy.setFrameRate(80);
     }
 
-    if (scorePlayer > 135)
+    if (scorePlayer > JELLYSPAWN2)
       jellyMax = 10;
-    if (scorePlayer > 400)
+    if (scorePlayer > EELSPAWN2)
       eelMax = 3;
     /*if (scorePlayer > 500)
       jellyMax = 3;
     if (scorePlayer > 600)
       jellyMax = 4;*/
 
-    if (scorePlayer > 500)
+    if (scorePlayer > FASTSPAWN)
       createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fillers, tighten gap, faster moving
 
-    if (scorePlayer > 200)
+    if (scorePlayer > EELSPAWN)
       createEnemy(ENEMY_EEL, (random(3) * 28) + LANEOFFSET); // Three possible eel lanes, not distruptor, just limits v movement
-    if (scorePlayer > 1000)
+    if (scorePlayer > EELSPAWN3)
       createEnemy(ENEMY_EEL, 28 + LANEOFFSET); // Three possible eel lanes, not distruptor, just limits v movement
-    if (scorePlayer > 70)
+    if (scorePlayer > JELLYSPAWN)
     {
       byte pos = 0;
       if (trollyFish.y < 32)
@@ -233,7 +241,7 @@ void spawnWave()
       createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fillers, tighten gap, faster moving
 
     // There is always enough room between bad fish, jellyfish and eels are what forces a move
-    if (scorePlayer < 1000)
+    if (scorePlayer < FASTSPAWN2)
       createEnemy(ENEMY_BAD, (random(3) * 28) + LANEOFFSET); // Fish are fillers
     else
       createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fish are fillers
