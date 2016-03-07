@@ -6,7 +6,7 @@
 #define MAX_ENEMIES             9
 
 extern Arduboy arduboy;
-extern unsigned int scorePlayer;
+extern unsigned long scorePlayer;
 extern Physics physics;
 //extern Player trollyFish;
 extern void giveBonus(int8_t, int8_t, byte);

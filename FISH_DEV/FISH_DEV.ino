@@ -41,7 +41,7 @@
 Arduboy arduboy;
 SimpleButtons buttons (arduboy);
 Sprites sprites(arduboy);
-unsigned int scorePlayer;
+unsigned long scorePlayer;
 
 
 unsigned char gameState = STATE_MENU_MAIN;
@@ -146,8 +146,9 @@ void loop() {
       checkIfScored();
       drawTrollyFish();
       drawEnemies();
-      drawScore(64,0,0);
+      drawScore(86,0,0);
       drawPowerUps();
+      drawWeed();
       if (checkGameOver())gameState = STATE_GAME_OVER;
       break;
     case STATE_GAME_OVER:
@@ -159,7 +160,8 @@ void loop() {
       }
       break;
     case STATE_GAME_PAUSE:
-      if (buttons.justPressed(B_BUTTON))
+      
+      if (buttons.justPressed(A_BUTTON))
       {
         gameState = STATE_GAME_PLAYING;
       }

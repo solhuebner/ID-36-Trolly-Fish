@@ -49,12 +49,12 @@ void checkInputs()
   
   if (buttons.justPressed(A_BUTTON))
   {
-    
+    gameState = STATE_GAME_PAUSE;
   }
   
   if (buttons.justPressed(B_BUTTON))
   {
-    gameState = STATE_GAME_PAUSE;
+
   }
 }
 
