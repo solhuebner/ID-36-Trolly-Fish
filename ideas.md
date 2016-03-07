@@ -53,13 +53,13 @@ We need a good balance between stars to catch and enemies.
 ## BONUS LIST FOR KILLING ENEMIES
 | 			  | **Bad Fishy** |  **Fast Bad Fishy** |  **Jelly Fish** |  **Eel**   |
 | ---         | ---           | ---                 | ---       	  |  ---       | 
-|  **shoot**  |      +100     |         +200        |       +300      |    +500    |
-|  **shock**  |      +100     |         +200        |         X       |      X     |
-|  **pop**    |      +100     |         +100        |       +200      |    +400    |
+|  **shoot**  |      +10     |         +20        |       +30      |    +50    |
+|  **shock**  |      +10     |         +20        |         X       |      X     |
+|  **pop**    |      +10     |         +10        |       +20      |    +40    |
 
 
 ##BONUS LIST FOR COLLECTING
-- collecting a power-up that can not be combined = +200
-- collecting all stars of 1 stream = +300
-- collecting a star of turned fish = +400
-- collecting an extra live when you already have an extra life = +500
+- collecting a power-up that can not be combined = +20
+- collecting all stars of 1 stream = +30
+- collecting a star of turned fish = +40
+- collecting an extra live when you already have an extra life = +50

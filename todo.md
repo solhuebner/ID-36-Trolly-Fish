@@ -5,7 +5,7 @@
 - reset difficulty and other variables when a new game starts
 - ~~swap A B buttons~~
 - ~~change score from int to long (also in the function drawScore change itoa to ltoa) going for 6 digits~~
-- move the score to the right corner
+- ~~move the score to the right corner~~
 - remove the lowest lane of enemies
 - ~~add some kind of small seaweed at the bottom of the screen~~
 - maybe add a large seaweed at the left side of the screen with bubbles ?
