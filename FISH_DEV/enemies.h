@@ -35,7 +35,7 @@ extern Arduboy arduboy;
 extern byte getPowerup(byte);
 extern const unsigned char starFish_plus_mask[];
 extern byte pu_timers[];
-extern unsigned int scorePlayer;
+extern unsigned long scorePlayer;
 extern void giveBonus(int8_t, int8_t, byte);
 
 byte fishFrame = 0;

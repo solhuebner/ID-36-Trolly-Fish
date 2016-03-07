@@ -12,7 +12,7 @@
 
 
 extern Physics physics;
-extern unsigned int scorePlayer;
+extern unsigned long scorePlayer;
 extern byte eelMax;
 extern byte jellyMax;
 
@@ -33,6 +33,8 @@ extern byte jellyMax;
 extern void setPowerup(byte index, byte state);
 extern byte getPowerup(byte index);
 extern void createPowerUp(byte type);
+
+byte seaWeetFrames;
 
 PROGMEM const unsigned char numbersSmall_plus_mask[] = {
 // width, height
@@ -159,6 +161,27 @@ PROGMEM const unsigned char bonusPoints_plus_mask[] = {
 // +50
 0x00, 0x1C, 0x08, 0x3E, 0x1C, 0x3E, 0x08, 0x3E, 0x00, 0x7F, 0x2E, 0x7F, 0x2A, 
 0x7F, 0x3A, 0x7F, 0x00, 0x7F, 0x3E, 0x7F, 0x22, 0x7F, 0x3E, 0x7F, 0x00, 0x7F, 
+};
+
+PROGMEM const unsigned char seaWeetSmall[] = {
+// width, height
+8, 8,
+// frame 0
+0x00, 0xC0, 0x00, 0xE0, 0x00, 0xFC, 0x00, 0xF0, 
+// frame 1
+0x00, 0xC0, 0x00, 0xE0, 0x00, 0xFC, 0x00, 0xF0, 
+// frame 2
+0x40, 0x80, 0x60, 0x80, 0x70, 0x8C, 0x40, 0xB0, 
+// frame 3
+0x40, 0xA0, 0x40, 0x84, 0x78, 0x80, 0x60, 0x90, 
+// frame 4
+0x40, 0xA0, 0x48, 0xB0, 0x40, 0x90, 0x60, 0x80, 
+// frame 5
+0x40, 0x80, 0x20, 0xC0, 0x38, 0xC0, 0x30, 0xC0, 
+// frame 6
+0x00, 0xC0, 0x00, 0xE0, 0x00, 0xFC, 0x00, 0xF0, 
+// frame 7
+0x10, 0xC0, 0x00, 0xC0, 0x20, 0xF8, 0x04, 0xE0, 
 };
 
 
@@ -310,9 +333,9 @@ void drawScore(byte scoreX, byte scoreY, byte fontType)
 {
   char buf[10];
   //scorePlayer = arduboy.cpuLoad();
-  itoa(scorePlayer, buf, 10);
+  ltoa(scorePlayer, buf, 10);
   char charLen = strlen(buf);
-  char pad = 5 - charLen;
+  char pad = 6 - charLen;
 
   //draw 0 padding
   for (byte i = 0; i < pad; i++)
@@ -395,6 +418,16 @@ void drawPowerUps()
   {
     sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 5);
     offset += 8;
+  }
+}
+
+void drawWeed()
+{
+  if (arduboy.everyXFrames(10)) seaWeetFrames++;
+  if (seaWeetFrames > 7 ) seaWeetFrames = 0;
+  for (byte i=0;i<16;i++)
+  {
+    sprites.drawSelfMasked(8*i, 56, seaWeetSmall, seaWeetFrames);
   }
 }
 
