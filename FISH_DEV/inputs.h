@@ -10,6 +10,8 @@
 #define STATE_GAME_PAUSE        9
 
 
+const byte bottom_border = GAME_BOTTOM - trollyFish.height + 2;
+
 extern Arduboy arduboy;
 extern SimpleButtons buttons;
 extern unsigned char gameState;
@@ -17,7 +19,7 @@ extern unsigned char gameState;
 
 void checkInputs()
 {
-  if (buttons.justPressed(RIGHT_BUTTON))
+  /*if (buttons.justPressed(RIGHT_BUTTON))
   {
     
   }
@@ -25,27 +27,27 @@ void checkInputs()
   if (buttons.justPressed(LEFT_BUTTON))
   {
     
-  }
+  }*/
   
   if (buttons.pressed(UP_BUTTON) && (trollyFish.y > GAME_TOP))
   {
     trollyFish.y -= trollyFish.ySpeed;
   }
   
-  if (buttons.pressed(DOWN_BUTTON) && (trollyFish.y < GAME_BOTTOM - trollyFish.height + 2))
+  if (buttons.pressed(DOWN_BUTTON) && (trollyFish.y < bottom_border))
   {
     trollyFish.y += trollyFish.ySpeed;
   }
 
-  if (buttons.pressed(LEFT_BUTTON) && (trollyFish.x > GAME_LEFT))
+  /*if (buttons.pressed(LEFT_BUTTON) && (trollyFish.x > GAME_LEFT))
   {
-    //trollyFish.x -= trollyFish.xSpeed;
+    trollyFish.x -= trollyFish.xSpeed;
   }
   
   if (buttons.pressed(RIGHT_BUTTON) && (trollyFish.x < GAME_RIGHT))
   {
-    //trollyFish.x += trollyFish.xSpeed;
-  }
+    trollyFish.x += trollyFish.xSpeed;
+  }*/
   
   if (buttons.justPressed(A_BUTTON))
   {

@@ -427,7 +427,7 @@ void drawEnemies()
         break;
 
         case ENEMY_DEAD:
-        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, 1);
+        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))) + 3);
         break;
       }
     }
