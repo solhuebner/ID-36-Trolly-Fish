@@ -111,6 +111,8 @@ void loop() {
     case STATE_MENU_PLAY:
       scorePlayer = 0;
       //starFish.resetPos();
+      pu_shocks = 0;
+      pu_bubbles = 0;
       fr = 60;
       startStarFish();
       initStarFish(0);

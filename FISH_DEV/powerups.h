@@ -18,6 +18,7 @@ extern void giveBonus(int8_t, int8_t, byte);
 
 #define GAME_LEFT       3
 
+// Powerups
 #define PU_TURNFISH     0
 #define PU_STOPFISH     1
 #define PU_SHOOTFISH    2
@@ -27,10 +28,15 @@ extern void giveBonus(int8_t, int8_t, byte);
 #define PU_SHOCKFISH    6
 #define PU_MAGNETFISH   7
 
+// Powerup Timers
 #define PUT_STOP    0
 #define PUT_PROTECT 1
 #define PUT_SHOCK   2
 #define PUT_MAGNET  3
+
+// Powerup Charges
+#define PUC_SHOOT   15
+#define PUC_SHOCK   8
 
 #define MAX_POWERUPS    1
 #define PU_ON           1
@@ -95,6 +101,8 @@ void createStar(byte, byte);
 // Total of 8 powerups, 1 byte of flags
 byte powerups = 0x00;   //Active powerups
 byte pu_timers[4];
+byte pu_shocks = 0;
+byte pu_bubbles = 0;
 
 // Set the value of a powerup flag
 void setPowerup(byte index, byte state)
@@ -148,6 +156,8 @@ void triggerPowerUp(byte type)
   switch (type)
   {
     case PU_SHOOTFISH: arduboy.tunes.tone(300, 50);
+      pu_bubbles = PUC_SHOOT;
+      setPowerup(type, PU_ON);
       break;
     case PU_TURNFISH: arduboy.tunes.tone(300, 50);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
@@ -192,7 +202,8 @@ void triggerPowerUp(byte type)
       break;
     case PU_SHOCKFISH: arduboy.tunes.tone(250, 50);
       setPowerup(type, PU_ON);
-      pu_timers[PUT_SHOCK] = 255;
+      //pu_timers[PUT_SHOCK] = 255;
+      pu_shocks = PUC_SHOCK;
       break;
     case PU_MAGNETFISH: arduboy.tunes.tone(380, 50);
       setPowerup(type, PU_ON);
