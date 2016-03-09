@@ -286,7 +286,10 @@ void spawnWave()
 }
 
 boolean checkGameOver()
-{        
+{
+  if (getPowerup(PU_PROTECTFISH)) // protected
+        return false;
+        
   Rect player = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
   Rect enemy;
   for (byte i = 0; i < MAX_ENEMIES; i++)
@@ -295,19 +298,8 @@ boolean checkGameOver()
     enemy.y = enemyFish[i].y;
     enemy.width = enemyFish[i].width;
     enemy.height = enemyFish[i].height;
-    if (physics.collide(enemy, player))
+    if (enemyFish[i].type != ENEMY_BUBBLE && enemyFish[i].type != ENEMY_DEAD && physics.collide(enemy, player))
     {
-      /*if (enemyFish[i].type == ENEMY_STAR)
-      {
-        scorePlayer++;
-        arduboy.tunes.tone(300, 40);
-        enemyFish[i].resetPos();
-        return false;
-      }*/
-
-      if (getPowerup(PU_PROTECTFISH)) // protected
-        return false;
-      
       if (getPowerup(PU_LIFEFISH)) // extra life
       {
         arduboy.tunes.tone(280, 50);
@@ -316,9 +308,6 @@ boolean checkGameOver()
         enemyFish[i].resetPos();
         return false;
       }
-
-      if (enemyFish[i].type == ENEMY_BUBBLE || enemyFish[i].type == ENEMY_DEAD)
-        return false;
 
       arduboy.setFrameRate(60);
       fr = 60;
