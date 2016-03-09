@@ -198,6 +198,8 @@ PROGMEM const unsigned char seaWeetSmall[] = {
 #define FASTSPAWN   500
 #define FASTSPAWN2  1000
 
+#define LANE_SEP    25
+
 int spawnTimer = 20;
 int8_t laneRide = 0;
 int fr = 60;
@@ -248,10 +250,10 @@ void spawnWave()
       jellyMax = 4;*/
 
     if (scorePlayer > FASTSPAWN)
-      createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fillers, tighten gap, faster moving
+      createEnemy(ENEMY_FAST, (random(3) * LANE_SEP) + LANEOFFSET); // Fillers, tighten gap, faster moving
 
     if (scorePlayer > EELSPAWN)
-      createEnemy(ENEMY_EEL, (random(3) * 28) + LANEOFFSET); // Three possible eel lanes, not distruptor, just limits v movement
+      createEnemy(ENEMY_EEL, (random(3) * LANE_SEP) + LANEOFFSET); // Three possible eel lanes, not distruptor, just limits v movement
     if (scorePlayer > EELSPAWN3)
       createEnemy(ENEMY_EEL, 28 + LANEOFFSET); // Three possible eel lanes, not distruptor, just limits v movement
     if (scorePlayer > JELLYSPAWN)
@@ -273,15 +275,15 @@ void spawnWave()
     }
 
     if (scorePlayer > 2000)
-      createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fillers, tighten gap, faster moving
+      createEnemy(ENEMY_FAST, (random(3) * LANE_SEP) + LANEOFFSET); // Fillers, tighten gap, faster moving
 
     // There is always enough room between bad fish, jellyfish and eels are what forces a move
     if (scorePlayer < FASTSPAWN2)
-      createEnemy(ENEMY_BAD, (random(3) * 28) + LANEOFFSET); // Fish are fillers
+      createEnemy(ENEMY_BAD, (random(3) * LANE_SEP) + LANEOFFSET); // Fish are fillers
     else
-      createEnemy(ENEMY_FAST, (random(3) * 28) + LANEOFFSET); // Fish are fillers
+      createEnemy(ENEMY_FAST, (random(3) * LANE_SEP) + LANEOFFSET); // Fish are fillers
     if (scorePlayer > 50)
-      createEnemy(ENEMY_BAD, (random(3) * 28) + LANEOFFSET); // Extra fillers
+      createEnemy(ENEMY_BAD, (random(3) * LANE_SEP) + LANEOFFSET); // Extra fillers
   }
 }
 

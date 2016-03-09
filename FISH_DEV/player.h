@@ -26,6 +26,10 @@ extern byte pu_timers[];
 #define PU_SHOCKFISH    6
 #define PU_MAGNETFISH   7
 
+#define SHOCK_LENGTH    8
+
+int8_t shock_burst = 0;
+
 byte trollyFrame = 0;
 
 PROGMEM const unsigned char Trolly_plus_mask[] = {
@@ -118,6 +122,9 @@ Player trollyFish = {.x = 20, .y = 32, .width = 2, .height = 4, .xSpeed = 1, .yS
 
 void drawTrollyFish()
 {
+  if (arduboy.everyXFrames(3) && shock_burst > 0) // Manage shock bursting
+    --shock_burst;
+    
   byte faster = 1;
   if (buttons.pressed(UP_BUTTON) || buttons.pressed(DOWN_BUTTON)) faster = 2;
   
@@ -125,7 +132,13 @@ void drawTrollyFish()
 
   if (trollyFrame > 3 ) trollyFrame = 0;
   sprites.drawPlusMask(trollyFish.x - 6, trollyFish.y - 8, Trolly_plus_mask, trollyFrame);
-  if (getPowerup(PU_PROTECTFISH) && (pu_timers[PUT_PROTECT] > 60 || pu_timers[PUT_PROTECT] % 2 == 0)) sprites.drawPlusMask(trollyFish.x - 6 -4, trollyFish.y - 8 -4, bigBubble_plus_mask, 0);
+  // Protect Powerup
+  if (getPowerup(PU_PROTECTFISH) && (pu_timers[PUT_PROTECT] > 60 || pu_timers[PUT_PROTECT] % 2 == 0))
+    sprites.drawPlusMask(trollyFish.x - 6 -4, trollyFish.y - 8 -4, bigBubble_plus_mask, 0);
+
+  // Shock Powerup
+  if (shock_burst > 0)
+    sprites.drawPlusMask(trollyFish.x - 6 -4, trollyFish.y - 8 -4, shockAura_plus_mask, ((shock_burst * 10) / SHOCK_LENGTH * 3) / 10);
   
 }
 

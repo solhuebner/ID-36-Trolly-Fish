@@ -271,8 +271,8 @@ void updateEnemies()
             }
           }
           // Shock fish to death if effect is on and within range
-          if (getPowerup(PU_SHOCKFISH) && abs(enemyFish[i].x - trollyFish.x) < 32
-              && abs(enemyFish[i].y - trollyFish.y) < 32)
+          if (shock_burst > 0)/*(getPowerup(PU_SHOCKFISH) && abs(enemyFish[i].x - trollyFish.x) < 32
+              && abs(enemyFish[i].y - trollyFish.y) < 32)*/
           {
             enemyFish[i].type = ENEMY_DEAD;
             giveBonus(enemyFish[i].x, enemyFish[i].y, 1);
@@ -300,8 +300,8 @@ void updateEnemies()
             }
           }
           // Shock fish to death if effect is on and within range
-          if (getPowerup(PU_SHOCKFISH) && abs(enemyFish[i].x - trollyFish.x) < 32
-              && abs(enemyFish[i].y - trollyFish.y) < 32)
+          if (shock_burst > 0)/*(getPowerup(PU_SHOCKFISH) && abs(enemyFish[i].x - trollyFish.x) < 32
+              && abs(enemyFish[i].y - trollyFish.y) < 32)*/
           {
             enemyFish[i].type = ENEMY_DEAD;
             giveBonus(enemyFish[i].x, enemyFish[i].y, 2);
@@ -437,7 +437,10 @@ void drawEnemies()
         break;
 
         case ENEMY_DEAD:
-        sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, (fishFrame * (min(enemyFish[i].burst, 1))) + 3);
+        {
+          byte df = (shock_burst > 0) ? (shock_burst % 2) + 4 : 6;
+          sprites.drawPlusMask(enemyFish[i].x, enemyFish[i].y - 1, badFishy_plus_mask, df);
+        }
         break;
       }
     }

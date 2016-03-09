@@ -56,7 +56,11 @@ void checkInputs()
   
   if (buttons.justPressed(B_BUTTON))
   {
-
+    if (pu_shocks > 0 && shock_burst == 0)
+    {
+      --pu_shocks;
+      shock_burst = SHOCK_LENGTH;
+    }
   }
 }
 
