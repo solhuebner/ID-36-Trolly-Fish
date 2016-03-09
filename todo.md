@@ -1,14 +1,20 @@
 ## Things not to forget
 - implement shooting
 - use the shock aura
+- shooking should only work when pushing the action button
+- implement the "amount left" for shocking and shooting
 - use the bad fishy shock frames and dead frame
 - reset difficulty and other variables when a new game starts
+- power-ups should no longer be random, but a pre-specified sequence
+- starfish seqeunce should not be random, but a pre-specified sequence
+- rework the jellyfish animation, the frame sequence is wrong
 - ~~swap A B buttons~~
 - ~~change score from int to long (also in the function drawScore change itoa to ltoa) going for 6 digits~~
 - ~~move the score to the right corner~~
-- remove the lowest lane of enemies
+- move the lowest lane of enemies some pixels upwards
 - ~~add some kind of small seaweed at the bottom of the screen~~
-- maybe add a large seaweed at the left side of the screen with bubbles ?
+- maybe add a large seaweed at the left side of the screen?
+- try some sort of bubble sequence, showing bubbles going over the entire screen
 - when you have the extra life and you get hit, Trolly Fish should blink for some secs.
 
 - make pause screen
