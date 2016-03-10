@@ -18,8 +18,8 @@ extern byte pu_timers[];
 
 #define PU_SHOOTFISH    0
 #define PU_TURNFISH     1
-#define PU_STOPFISH     2
-#define PU_POPFISH      3
+#define PU_POPFISH      2
+#define PU_STOPFISH     3
 //#define PU_SHOOTFISH    4
 #define PU_PROTECTFISH  4
 #define PU_LIFEFISH     5

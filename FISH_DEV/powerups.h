@@ -21,8 +21,8 @@ extern void giveBonus(int8_t, int8_t, byte);
 // Powerups
 #define PU_TURNFISH     0
 #define PU_STOPFISH     1
-#define PU_SHOOTFISH    2
-#define PU_POPFISH      3
+#define PU_POPFISH      2
+#define PU_SHOOTFISH    3
 #define PU_PROTECTFISH  4
 #define PU_LIFEFISH     5
 #define PU_SHOCKFISH    6

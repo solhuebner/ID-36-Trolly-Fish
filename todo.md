@@ -1,9 +1,10 @@
 ## Things not to forget
 - implement shooting
-- use the shock aura
-- shooking should only work when pushing the action button
-- implement the "amount left" for shocking and shooting
-- use the bad fishy shock frames and dead frame
+- ~~correct the shootFish power-up icon and popFish power-up icon, those are swapped.~~
+- ~~implement the shock aura~~
+- ~~shooking should only work when pushing the action button~~
+- ~~implement the "amount left" for shocking and shooting~~
+- ~~use the bad fishy shock frames and dead frame~~
 - reset difficulty and other variables when a new game starts
 - power-ups should no longer be random, but a pre-specified sequence
 - starfish seqeunce should not be random, but a pre-specified sequence
@@ -11,7 +12,7 @@
 - ~~swap A B buttons~~
 - ~~change score from int to long (also in the function drawScore change itoa to ltoa) going for 6 digits~~
 - ~~move the score to the right corner~~
-- move the lowest lane of enemies some pixels upwards
+- ~~move the lowest lane of enemies some pixels upwards~~
 - ~~add some kind of small seaweed at the bottom of the screen~~
 - maybe add a large seaweed at the left side of the screen?
 - try some sort of bubble sequence, showing bubbles going over the entire screen
