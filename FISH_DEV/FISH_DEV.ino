@@ -1,11 +1,11 @@
 /*
  Trolly Fish: http://www.team-arg.org/fish-manual.html
 
- Arduboy version 0.2:  http://www.team-arg.org/fish-downloads.html
+ Arduboy version 0.8:  http://www.team-arg.org/fish-downloads.html
 
  MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
- 2016 JO3RI - GAVENO
+ 2016 - GAVENO - JO3RI - JUSTIN CRY
 
  License: MIT : https://opensource.org/licenses/MIT
 
@@ -155,7 +155,7 @@ void loop() {
       break;
     case STATE_GAME_OVER:
       arduboy.drawBitmap(5, 5, gameOver, 118, 24, WHITE);
-      drawScore(19,35,1);
+      drawScore(32,40,1);
       if (buttons.justPressed(A_BUTTON | B_BUTTON))
       {
         gameState = STATE_MENU_MAIN;

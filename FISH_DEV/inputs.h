@@ -19,16 +19,6 @@ extern unsigned char gameState;
 
 void checkInputs()
 {
-  /*if (buttons.justPressed(RIGHT_BUTTON))
-  {
-    
-  }
-  
-  if (buttons.justPressed(LEFT_BUTTON))
-  {
-    
-  }*/
-  
   if (buttons.pressed(UP_BUTTON) && (trollyFish.y > GAME_TOP))
   {
     trollyFish.y -= trollyFish.ySpeed;
@@ -38,17 +28,6 @@ void checkInputs()
   {
     trollyFish.y += trollyFish.ySpeed;
   }
-
-  /*if (buttons.pressed(LEFT_BUTTON) && (trollyFish.x > GAME_LEFT))
-  {
-    trollyFish.x -= trollyFish.xSpeed;
-  }
-  
-  if (buttons.pressed(RIGHT_BUTTON) && (trollyFish.x < GAME_RIGHT))
-  {
-    trollyFish.x += trollyFish.xSpeed;
-  }*/
-  
   if (buttons.justPressed(A_BUTTON))
   {
     gameState = STATE_GAME_PAUSE;

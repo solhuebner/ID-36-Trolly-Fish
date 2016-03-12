@@ -197,7 +197,7 @@ void triggerPowerUp(byte type)
       break;
     case PU_LIFEFISH: arduboy.tunes.tone(280, 50);
       if (getPowerup(PU_LIFEFISH))
-        giveBonus(trollyFish.x, trollyFish.y, 5);
+        giveBonus(20, trollyFish.y, 5);
       setPowerup(type, PU_ON);
       break;
     case PU_SHOCKFISH: arduboy.tunes.tone(250, 50);
@@ -248,7 +248,7 @@ void updatePowerUp()
     if (powerUp.x % 24 < 18)
       sprites.drawPlusMask(powerUp.x, powerUp.y - 1, powerUps_plus_mask, powerUp.type);
 
-    Rect playerRect = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
+    Rect playerRect = {.x = 20, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
 
     Rect powerupRect = {.x = powerUp.x, .y = powerUp.y, .width = powerUp.width, powerUp.height};
   
@@ -436,17 +436,17 @@ void updateStarFish()
     {
       if (getPowerup(PU_MAGNETFISH) || i >= MAX_STARS)
       {
-        if (arduboy.everyXFrames(2) && abs(trollyFish.x - starFish[i].x) < 32)
+        if (arduboy.everyXFrames(2) && abs(20 - starFish[i].x) < 32)
         {
           // Y magnet
           if (starFish[i].y < trollyFish.y) starFish[i].y++;
           if (starFish[i].y > trollyFish.y) starFish[i].y--;
 
           // X magnet
-          if (starFish[i].x < trollyFish.x) starFish[i].x++;
-          if (starFish[i].x > trollyFish.x) starFish[i].x--;
+          if (starFish[i].x < 20) starFish[i].x++;
+          if (starFish[i].x > 20) starFish[i].x--;
         }
-        if (arduboy.everyXFrames(2) && abs(trollyFish.x - starFish[i].x) < 42)
+        if (arduboy.everyXFrames(2) && abs(20 - starFish[i].x) < 42)
         {
           // Y magnet further out
           if (starFish[i].y < trollyFish.y) starFish[i].y++;
@@ -466,7 +466,7 @@ void updateStarFish()
 }
 
 void checkIfScored() {
-  Rect playerRect = {.x = trollyFish.x, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
+  Rect playerRect = {.x = 20, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
 
   for (byte i = 0; i < TOTAL_STARS; ++i)
   {
@@ -480,7 +480,7 @@ void checkIfScored() {
       ++streak;
       if (streak >= 8)
       {
-        giveBonus(trollyFish.x + 8, trollyFish.y, 1);
+        giveBonus(28, trollyFish.y, 1);
         streak = 0;
       }
     }
