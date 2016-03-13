@@ -17,10 +17,10 @@
 - ~~move the lowest lane of enemies some pixels upwards~~
 - ~~add some kind of small seaweed at the bottom of the screen~~
 - ~~maybe add a large seaweed at the left side of the screen?~~
-- try some sort of bubble sequence, showing bubbles going over the entire screen
+- ~~try some sort of bubble sequence, showing bubbles going over the entire screen~~
 - when you have the extra life and you get hit, Trolly Fish should blink for some secs.
 - ~~change numbersBig sprite~~
 
-- make pause screen
-- make a better Game Over screen
-- make an info screen
+- ~~make pause screen~~
+- ~~make a better Game Over screen~~
+- ~~make an info screen~~

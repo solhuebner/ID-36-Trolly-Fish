@@ -1,15 +1,15 @@
 /*
- Trolly Fish: http://www.team-arg.org/fish-manual.html
+  Trolly Fish: http://www.team-arg.org/fish-manual.html
 
- Arduboy version 0.8:  http://www.team-arg.org/fish-downloads.html
+  Arduboy version 0.8:  http://www.team-arg.org/fish-downloads.html
 
- MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
+  MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
- 2016 - GAVENO - JO3RI - JUSTIN CRY
+  2016 - GAVENO - JO3RI - JUSTIN CRY
 
- License: MIT : https://opensource.org/licenses/MIT
+  License: MIT : https://opensource.org/licenses/MIT
 
- */
+*/
 
 //determine the game
 #define GAME_ID 36
@@ -73,31 +73,57 @@ void loop() {
     case STATE_MENU_INTRO:
       arduboy.drawBitmap(0, 8, TEAMarg2, 128, 48, WHITE);
       counter++;
-      if (counter > 180) gameState = STATE_MENU_MAIN;
+      if (counter > 180)
+      {
+        for (byte i = 0; i < 16; i++)
+        {
+          titleBubbles[i].resetPos(false);
+        }
+        gameState = STATE_MENU_MAIN;
+      }
       break;
     case STATE_MENU_MAIN:
       // show the splash art
       arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
-      arduboy.drawBitmap(73, 2, titleMenu, 49, 24, WHITE);
-      sprites.drawPlusMask(73 + (menuX*26), 2 + (menuY*12), bubbles_plus_mask, bubblesFrame);
+      drawBubbles(false);
+
+      for (byte k = 0; k < 2; k++)
+      {
+        for (byte j = 0; j < 2; j++)
+        {
+          sprites.drawPlusMask(73 + (j * 26), 2 + (k * 12), titleMenu_plus_mask, j + (2 * k));
+        }
+      }
+
+      sprites.drawPlusMask(73 + (menuX * 26), 2 + (menuY * 12), bubbles_plus_mask, bubblesFrame);
       if (buttons.justPressed(RIGHT_BUTTON) && (!menuX)) menuX = !menuX;
       if (buttons.justPressed(LEFT_BUTTON) && (menuX)) menuX = !menuX;
       if (buttons.justPressed(DOWN_BUTTON) && (!menuY)) menuY = !menuY;
       if (buttons.justPressed(UP_BUTTON) && (menuY)) menuY = !menuY;
-      if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = 2 + menuX + (2*menuY);
+      if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = 2 + menuX + (2 * menuY);
       break;
     case STATE_MENU_HELP: // QR code
       arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
       break;
     case STATE_MENU_INFO: // infoscreen
-      arduboy.drawBitmap(16, 20, info_bitmap, 96, 24, WHITE);
+      arduboy.drawBitmap(14 , 8 , trollyFishTitle, 100 , 16, WHITE);
+      arduboy.drawBitmap(26 , 30 , madeBy01, 75 , 8, WHITE);
+      arduboy.drawBitmap(51 , 38 , madeBy02, 30 , 8, WHITE);
+      arduboy.drawBitmap(30 , 50 , madeBy03, 79 , 8, WHITE);
+      drawWeed();
+      drawBubbles(false);
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
       break;
     case STATE_MENU_SOUNDFX: // soundconfig screen
       arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
-      arduboy.drawBitmap(81, 2, soundMenu, 33, 24, WHITE);
-      sprites.drawPlusMask(78 + (soundYesNo*20) , 14 , bubbles_plus_mask, bubblesFrame);
+      drawBubbles(false);
+      sprites.drawPlusMask(88  , 2 , soundMenu_plus_mask, 0);
+      for (byte j = 0; j < 2; j++)
+      {
+        sprites.drawPlusMask(78 + (24 * j) , 14 , soundMenu_plus_mask, 1 + j);
+      }
+      sprites.drawPlusMask(76 + (soundYesNo * 22) , 14 , bubbles_plus_mask, bubblesFrame);
       if (buttons.justPressed(RIGHT_BUTTON)) soundYesNo = true;
       if (buttons.justPressed(LEFT_BUTTON)) soundYesNo = false;
       if (buttons.justPressed(A_BUTTON | B_BUTTON))
@@ -135,6 +161,10 @@ void loop() {
         enemyFish[i].active = false;
         enemyFish[i].type = 0; //bad fish
       }
+      for (byte i = 0; i < 12; i++)
+      {
+        titleBubbles[i].resetPos(true);
+      }
 
       gameState = STATE_GAME_PLAYING;
       break;
@@ -148,21 +178,26 @@ void loop() {
       checkIfScored();
       drawTrollyFish();
       drawEnemies();
-      drawScore(86,0,0);
-      drawPowerUps();
+      drawScore(86, 0, 0);
       drawWeed();
+      drawBubbles(true);
+      drawPowerUps();
+
       if (checkGameOver())gameState = STATE_GAME_OVER;
       break;
     case STATE_GAME_OVER:
-      arduboy.drawBitmap(5, 5, gameOver, 118, 24, WHITE);
-      drawScore(32,40,1);
+      arduboy.drawBitmap(26, 8, gameOver, 84, 16, WHITE);
+      drawWeed();
+      drawScore(32, 36, 1);
       if (buttons.justPressed(A_BUTTON | B_BUTTON))
       {
         gameState = STATE_MENU_MAIN;
       }
       break;
     case STATE_GAME_PAUSE:
-      
+      arduboy.drawBitmap(40, 20, pause, 48, 16, WHITE);
+      drawWeed();
+      drawBubbles(false);
       if (buttons.justPressed(A_BUTTON))
       {
         gameState = STATE_GAME_PLAYING;

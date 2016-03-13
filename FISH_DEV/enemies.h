@@ -376,7 +376,7 @@ void updateEnemies()
         case ENEMY_STAR:
           if (getPowerup(PU_MAGNETFISH))
           {
-            if (arduboy.everyXFrames(3))
+            //if (arduboy.everyXFrames(3))
             {
               if (enemyFish[i].y < trollyFish.y) enemyFish[i].y++;
               if (enemyFish[i].y > trollyFish.y) enemyFish[i].y--;
