@@ -36,6 +36,8 @@ extern void createPowerUp(byte type);
 
 extern byte pu_shocks;
 extern byte pu_bubbles;
+//extern struct PowerUp;
+//extern PowerUp bubbleBullet;
 
 byte seaWeedFrames = 0;
 byte seaWeedFrames2 = 3;
@@ -390,8 +392,40 @@ boolean checkGameOver()
     enemy.y = enemyFish[i].y;
     enemy.width = enemyFish[i].width;
     enemy.height = enemyFish[i].height;
+
+  if (bubbleBullet.active)
+    {
+      Rect bubble = { .x = bubbleBullet.x, .y = bubbleBullet.y, .width = bubbleBullet.width, bubbleBullet.height };
+      if (physics.collide(enemy, bubble))
+      {
+        //enemyFish[i].resetPos();
+        //enemyFish[i].active = false;
+        //giveBonus(enemyFish[i].x, enemyFish[i].y, 2);
+        switch (enemyFish[i].type)
+        {
+          case ENEMY_JELLY:
+            numJellys--;
+            giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 3);
+            break;
+          case ENEMY_EEL:
+            numEels--;
+            giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 5);
+            break;
+          case ENEMY_FAST:
+            giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 2);
+            break;
+          default:
+            giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 1);
+        }
+        enemyFish[i].type = ENEMY_BUBBLE;
+          
+        bubbleBullet.active = false;
+      }
+    }
+      
     if (enemyFish[i].type != ENEMY_BUBBLE && enemyFish[i].type != ENEMY_DEAD && physics.collide(enemy, player))
     {
+      
       if (getPowerup(PU_LIFEFISH)) // extra life
       {
         arduboy.tunes.tone(280, 50);
@@ -486,18 +520,8 @@ void drawPowerUps()
   {
     sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 1);
     offset += 8;
-    if (pu_bubbles > 9)
-    {
-      sprites.drawPlusMask(1 + offset, 1, numbersSmall_plus_mask, pu_bubbles / 10);
-      offset += 8;
-      sprites.drawPlusMask(1 + offset, 1, numbersSmall_plus_mask, pu_bubbles % 10);
-      offset += 8;
-    }
-    else
-    {
-      sprites.drawPlusMask(1 + offset, 1, numbersSmall_plus_mask, pu_bubbles);
-      offset += 8;
-    }
+    sprites.drawPlusMask(1 + offset, 1, numbersSmall_plus_mask, pu_bubbles);
+    offset += 8;
   }
 
   if (getPowerup(PU_PROTECTFISH))

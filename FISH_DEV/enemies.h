@@ -180,7 +180,7 @@ struct Enemies
 
 void Enemies::resetPos()
 {
-  x = 12  * random(12, 14);
+  x = 144  + random(12);
   //y = 10 * random(1, 6);
 
   if (type == ENEMY_JELLY)

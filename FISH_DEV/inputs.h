@@ -15,6 +15,7 @@ const byte bottom_border = GAME_BOTTOM - trollyFish.height + 2;
 extern Arduboy arduboy;
 extern SimpleButtons buttons;
 extern unsigned char gameState;
+extern void shootBubble();
 
 
 void checkInputs()
@@ -40,6 +41,9 @@ void checkInputs()
       --pu_shocks;
       shock_burst = SHOCK_LENGTH;
     }
+
+    if (pu_bubbles > 0)
+      shootBubble();
   }
 }
 

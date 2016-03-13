@@ -21,8 +21,9 @@
 #include "menu.h"
 #include "player.h"
 #include "enemies.h"
-#include "stage.h"
 #include "powerups.h"
+#include "stage.h"
+
 #include "inputs.h"
 
 //define menu states (on main menu)
@@ -174,6 +175,7 @@ void loop() {
       updatePowerUp();
       updateStarFish();
       updateBonus();
+      updateBubble();
       if (arduboy.everyXFrames(3)) updateEnemies();
       checkIfScored();
       drawTrollyFish();

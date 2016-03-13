@@ -35,7 +35,7 @@ extern void giveBonus(int8_t, int8_t, byte);
 #define PUT_MAGNET  3
 
 // Powerup Charges
-#define PUC_SHOOT   15
+#define PUC_SHOOT   9
 #define PUC_SHOCK   8
 
 #define MAX_POWERUPS    1
@@ -133,6 +133,48 @@ PowerUp powerUp = {
   .active = false, .type = 0
 };
 
+PowerUp bubbleBullet = {
+  .x = 0, .y = 0, .width = 10,
+  .height = 10, .xSpeed = 2, .ySpeed = 0,
+  .active = false, .type = 0,
+};
+
+void shootBubble()
+{
+  if (!bubbleBullet.active && pu_bubbles > 0)
+  {
+    bubbleBullet.x = 16;
+    bubbleBullet.y = trollyFish.y;
+    bubbleBullet.xSpeed = 5;
+    bubbleBullet.ySpeed = 0;
+    bubbleBullet.active = true;
+
+    --pu_bubbles;
+  }
+}
+
+void updateBubble()
+{
+  if (bubbleBullet.active)
+  {
+    bubbleBullet.x += bubbleBullet.xSpeed;
+    bubbleBullet.y += bubbleBullet.ySpeed;
+
+    if (bubbleBullet.y > 64)
+    {
+      bubbleBullet.active = false;
+    }
+
+    if (arduboy.everyXFrames(6) && bubbleBullet.xSpeed > 0)
+    {
+      --bubbleBullet.xSpeed;
+      --bubbleBullet.ySpeed;
+    }
+
+    sprites.drawPlusMask(bubbleBullet.x, bubbleBullet.y - 1, bubbleBullet_plus_mask, 0);
+  }
+}
+
 void createPowerUp(byte type)
 {
   if (powerUp.active) // already a powerup spawned
@@ -183,11 +225,26 @@ void triggerPowerUp(byte type)
       {
         if (enemyFish[i].active && enemyFish[i].x < 135)
         {
-          byte a = 1;
+          /*byte a = 1;
           if (enemyFish[i].type == ENEMY_JELLY) { numJellys--; a = 2; }
           if (enemyFish[i].type == ENEMY_EEL) { numEels--; a = 4; }
           enemyFish[i].type = ENEMY_BUBBLE;
-          giveBonus(enemyFish[i].x, enemyFish[i].y + 8, a);
+          giveBonus(enemyFish[i].x, enemyFish[i].y + 8, a);*/
+
+          switch (enemyFish[i].type)
+          {
+            case ENEMY_JELLY:
+              numJellys--;
+              giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 2);
+              break;
+            case ENEMY_EEL:
+              numEels--;
+              giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 4);
+              break;
+            default:
+              giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 1);
+          }
+          enemyFish[i].type = ENEMY_BUBBLE;
         }
       }
       break;
@@ -275,6 +332,7 @@ void initStarFish(byte type);
 
 byte cycles = 3;
 byte streak = 0;
+byte star_type = 0;
 
 struct GameObject
 {
@@ -312,7 +370,9 @@ void GameObject::resetPos()
 
   if (done)
   {
-    initStarFish(random(TOTAL_TYPES));
+    //initStarFish(random(TOTAL_TYPES));
+    initStarFish(star_type);
+    star_type = (++star_type) % TOTAL_TYPES;
   }
 }
 
@@ -326,10 +386,10 @@ void createStar(byte _x, byte _y)
     {
       starFish[i].x = _x;
       starFish[i].y = _y;
-      starFish[i].width = 8;
-      starFish[i].height = STAR_HEIGHT;
+      //starFish[i].width = 8;
+      //starFish[i].height = STAR_HEIGHT;
       starFish[i].xSpeed = -2;
-      starFish[i].ySpeed = 0;
+      //starFish[i].ySpeed = 0;
       starFish[i].active = true;
       starFish[i].id = i;
 
