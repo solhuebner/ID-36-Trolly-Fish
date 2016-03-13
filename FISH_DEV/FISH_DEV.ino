@@ -108,10 +108,11 @@ void loop() {
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
       break;
     case STATE_MENU_INFO: // infoscreen
-      arduboy.drawBitmap(14 , 8 , trollyFishTitle, 100 , 16, WHITE);
-      arduboy.drawBitmap(26 , 30 , madeBy01, 75 , 8, WHITE);
-      arduboy.drawBitmap(51 , 38 , madeBy02, 30 , 8, WHITE);
-      arduboy.drawBitmap(30 , 50 , madeBy03, 79 , 8, WHITE);
+      arduboy.drawBitmap(14 , 0 , trollyFishTitle, 100 , 16, WHITE);
+      arduboy.drawBitmap(26 , 22 , madeBy01, 75 , 8, WHITE);
+      arduboy.drawBitmap(51 , 30 , madeBy02, 30 , 8, WHITE);
+      arduboy.drawBitmap(30 , 42 , madeBy03, 79 , 8, WHITE);
+      arduboy.drawBitmap(51 , 50 , madeBy02, 30 , 8, WHITE);
       drawWeed();
       drawBubbles(false);
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
@@ -188,9 +189,9 @@ void loop() {
       if (checkGameOver())gameState = STATE_GAME_OVER;
       break;
     case STATE_GAME_OVER:
-      arduboy.drawBitmap(26, 8, gameOver, 84, 16, WHITE);
+      arduboy.drawBitmap(22, 8, gameOver, 84, 16, WHITE);
       drawWeed();
-      drawScore(32, 36, 1);
+      drawScore(36, 36, 1);
       if (buttons.justPressed(A_BUTTON | B_BUTTON))
       {
         gameState = STATE_MENU_MAIN;
