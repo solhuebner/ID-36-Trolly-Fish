@@ -1,7 +1,7 @@
 /*
   Trolly Fish: http://www.team-arg.org/fish-manual.html
 
-  Arduboy version 0.8:  http://www.team-arg.org/fish-downloads.html
+  Arduboy version 0.9:  http://www.team-arg.org/fish-downloads.html
 
   MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
@@ -104,15 +104,14 @@ void loop() {
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = 2 + menuX + (2 * menuY);
       break;
     case STATE_MENU_HELP: // QR code
-      arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
+      //arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
       break;
     case STATE_MENU_INFO: // infoscreen
-      arduboy.drawBitmap(14 , 0 , trollyFishTitle, 100 , 16, WHITE);
-      arduboy.drawBitmap(26 , 22 , madeBy01, 75 , 8, WHITE);
-      arduboy.drawBitmap(51 , 30 , madeBy02, 30 , 8, WHITE);
-      arduboy.drawBitmap(30 , 42 , madeBy03, 79 , 8, WHITE);
-      arduboy.drawBitmap(51 , 50 , madeBy02, 30 , 8, WHITE);
+      arduboy.drawBitmap(14 , 8 , trollyFishTitle, 100 , 16, WHITE);
+      arduboy.drawBitmap(26 , 30 , madeBy01, 75 , 8, WHITE);
+      arduboy.drawBitmap(51 , 38 , madeBy02, 30 , 8, WHITE);
+      arduboy.drawBitmap(30 , 50 , madeBy03, 79 , 8, WHITE);
       drawWeed();
       drawBubbles(false);
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
@@ -189,9 +188,9 @@ void loop() {
       if (checkGameOver())gameState = STATE_GAME_OVER;
       break;
     case STATE_GAME_OVER:
-      arduboy.drawBitmap(22, 8, gameOver, 84, 16, WHITE);
+      arduboy.drawBitmap(26, 8, gameOver, 84, 16, WHITE);
       drawWeed();
-      drawScore(36, 36, 1);
+      drawScore(32, 36, 1);
       if (buttons.justPressed(A_BUTTON | B_BUTTON))
       {
         gameState = STATE_MENU_MAIN;

@@ -393,61 +393,67 @@ boolean checkGameOver()
     enemy.width = enemyFish[i].width;
     enemy.height = enemyFish[i].height;
 
-  if (bubbleBullet.active)
+    // Don't check collisions if enemy is a bubble or dead
+    if (enemyFish[i].type != ENEMY_BUBBLE && enemyFish[i].type != ENEMY_DEAD)
     {
-      Rect bubble = { .x = bubbleBullet.x, .y = bubbleBullet.y, .width = bubbleBullet.width, bubbleBullet.height };
-      if (physics.collide(enemy, bubble))
+      if (bubbleBullet.active)
       {
-        //enemyFish[i].resetPos();
-        //enemyFish[i].active = false;
-        //giveBonus(enemyFish[i].x, enemyFish[i].y, 2);
-        switch (enemyFish[i].type)
+        Rect bubble = { .x = bubbleBullet.x, .y = bubbleBullet.y, .width = bubbleBullet.width, bubbleBullet.height };
+        if (physics.collide(enemy, bubble))
         {
-          case ENEMY_JELLY:
-            numJellys--;
-            giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 3);
-            break;
-          case ENEMY_EEL:
-            numEels--;
-            giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 5);
-            break;
-          case ENEMY_FAST:
-            giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 2);
-            break;
-          default:
-            giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 1);
+          //enemyFish[i].resetPos();
+          //enemyFish[i].active = false;
+          //giveBonus(enemyFish[i].x, enemyFish[i].y, 2);
+          switch (enemyFish[i].type)
+          {
+            case ENEMY_JELLY:
+              numJellys--;
+              giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 3);
+              break;
+            case ENEMY_EEL:
+              numEels--;
+              giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 5);
+              break;
+            case ENEMY_FAST:
+              giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 2);
+              break;
+            default:
+              giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 1);
+          }
+          arduboy.tunes.tone(200, 50);
+          enemyFish[i].type = ENEMY_BUBBLE;
+            
+          bubbleBullet.active = false;
         }
-        enemyFish[i].type = ENEMY_BUBBLE;
-          
-        bubbleBullet.active = false;
       }
-    }
-      
-    if (enemyFish[i].type != ENEMY_BUBBLE && enemyFish[i].type != ENEMY_DEAD && physics.collide(enemy, player))
-    {
-      
-      if (getPowerup(PU_LIFEFISH)) // extra life
+        
+      if (physics.collide(enemy, player))
       {
-        arduboy.tunes.tone(280, 50);
-        setPowerup(PU_LIFEFISH, PU_OFF);
-        enemyFish[i].x -= 32;
-        enemyFish[i].resetPos();
-        return false;
+        
+        if (getPowerup(PU_LIFEFISH)) // extra life
+        {
+          arduboy.tunes.tone(280, 50);
+          setPowerup(PU_LIFEFISH, PU_OFF);
+          enemyFish[i].x -= 32;
+          enemyFish[i].resetPos();
+          trollyFish.blink = 36;
+          return false;
+        }
+  
+        arduboy.setFrameRate(60);
+        fr = 60;
+        arduboy.tunes.tone(90, 300);
+        delay(400);
+        arduboy.tunes.tone(100, 100);
+        delay(300);
+        arduboy.tunes.tone(150, 100);
+        delay(300);
+        arduboy.tunes.tone(90, 100);
+        delay(300);
+        arduboy.tunes.tone(300, 200);
+        delay(400);
+        return true;
       }
-
-      arduboy.setFrameRate(60);
-      fr = 60;
-      arduboy.tunes.tone(90, 300);
-      delay(400);
-      arduboy.tunes.tone(100, 100);
-      delay(300);
-      arduboy.tunes.tone(150, 100);
-      delay(300);
-      arduboy.tunes.tone(90, 100);
-      delay(300);
-      arduboy.tunes.tone(300, 200);
-      delay(400);
-      return true;
     }
   }
   return false;

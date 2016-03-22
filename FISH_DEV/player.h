@@ -107,14 +107,18 @@ struct Player
     int y;
     byte width, height;
     byte xSpeed, ySpeed;
+    byte blink;
 };
 
-Player trollyFish = {.y = 32, .width = 2, .height = 4, .xSpeed = 1, .ySpeed = 1};
+Player trollyFish = {.y = 32, .width = 2, .height = 4, .xSpeed = 1, .ySpeed = 1, .blink = 0 };
 
 void drawTrollyFish()
 {
   if (arduboy.everyXFrames(3) && shock_burst > 0) // Manage shock bursting
     --shock_burst;
+
+  if (arduboy.everyXFrames(5) && trollyFish.blink > 0)
+    --trollyFish.blink;
     
   byte faster = 1;
   if (buttons.pressed(UP_BUTTON) || buttons.pressed(DOWN_BUTTON)) faster = 2;
@@ -122,6 +126,7 @@ void drawTrollyFish()
   if (arduboy.everyXFrames(6 / faster)) trollyFrame++;
 
   if (trollyFrame > 3 ) trollyFrame = 0;
+  if (trollyFish.blink == 0 || trollyFish.blink % 4)
   sprites.drawPlusMask(14, trollyFish.y - 8, Trolly_plus_mask, trollyFrame);
   // Protect Powerup
   if (getPowerup(PU_PROTECTFISH) && (pu_timers[PUT_PROTECT] > 60 || pu_timers[PUT_PROTECT] % 2 == 0))
@@ -129,7 +134,11 @@ void drawTrollyFish()
 
   // Shock Powerup
   if (shock_burst > 0)
+  {
     sprites.drawSelfMasked(10, trollyFish.y - 8 -4, shockAura, trollyFrame);
+    //if (shock_burst % 2 == 0)
+    arduboy.tunes.tone(150 + random(100), 30);
+  }
   
 }
 

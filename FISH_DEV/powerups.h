@@ -198,8 +198,13 @@ void triggerPowerUp(byte type)
   switch (type)
   {
     case PU_SHOOTFISH: arduboy.tunes.tone(300, 50);
-      pu_bubbles = PUC_SHOOT;
-      setPowerup(type, PU_ON);
+      if (pu_shocks == 0) {
+        pu_bubbles = PUC_SHOOT;
+        setPowerup(type, PU_ON);
+      }
+      else {
+        giveBonus(40, trollyFish.y, 2);
+      }
       break;
     case PU_TURNFISH: arduboy.tunes.tone(300, 50);
       for (byte i = 0; i < MAX_ENEMIES; ++i)
@@ -258,9 +263,14 @@ void triggerPowerUp(byte type)
       setPowerup(type, PU_ON);
       break;
     case PU_SHOCKFISH: arduboy.tunes.tone(250, 50);
-      setPowerup(type, PU_ON);
-      //pu_timers[PUT_SHOCK] = 255;
-      pu_shocks = PUC_SHOCK;
+      if (pu_bubbles == 0) {
+        setPowerup(type, PU_ON);
+        //pu_timers[PUT_SHOCK] = 255;
+        pu_shocks = PUC_SHOCK;
+      }
+      else {
+        giveBonus(40, trollyFish.y, 2);
+      }
       break;
     case PU_MAGNETFISH: arduboy.tunes.tone(380, 50);
       setPowerup(type, PU_ON);
