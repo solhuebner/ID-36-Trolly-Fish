@@ -20,7 +20,6 @@ extern byte pu_timers[];
 #define PU_TURNFISH     1
 #define PU_POPFISH      2
 #define PU_STOPFISH     3
-//#define PU_SHOOTFISH    4
 #define PU_PROTECTFISH  4
 #define PU_LIFEFISH     5
 #define PU_SHOCKFISH    6
@@ -115,7 +114,10 @@ Player trollyFish = {.y = 32, .width = 2, .height = 4, .xSpeed = 1, .ySpeed = 1,
 void drawTrollyFish()
 {
   if (arduboy.everyXFrames(3) && shock_burst > 0) // Manage shock bursting
-    --shock_burst;
+    {
+      arduboy.tunes.tone(900, 25);
+      --shock_burst;
+    }
 
   if (arduboy.everyXFrames(5) && trollyFish.blink > 0)
     --trollyFish.blink;
@@ -128,6 +130,7 @@ void drawTrollyFish()
   if (trollyFrame > 3 ) trollyFrame = 0;
   if (trollyFish.blink == 0 || trollyFish.blink % 4)
   sprites.drawPlusMask(14, trollyFish.y - 8, Trolly_plus_mask, trollyFrame);
+  
   // Protect Powerup
   if (getPowerup(PU_PROTECTFISH) && (pu_timers[PUT_PROTECT] > 60 || pu_timers[PUT_PROTECT] % 2 == 0))
     sprites.drawPlusMask(10, trollyFish.y - 8 -4, bigBubble_plus_mask, 0);
@@ -135,9 +138,7 @@ void drawTrollyFish()
   // Shock Powerup
   if (shock_burst > 0)
   {
-    sprites.drawSelfMasked(10, trollyFish.y - 8 -4, shockAura, trollyFrame);
-    //if (shock_burst % 2 == 0)
-    arduboy.tunes.tone(150 + random(100), 30);
+    sprites.drawSelfMasked(10, trollyFish.y - 8 -4, shockAura, trollyFrame);    
   }
   
 }

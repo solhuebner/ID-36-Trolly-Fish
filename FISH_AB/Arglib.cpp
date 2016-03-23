@@ -1125,6 +1125,7 @@ boolean Arduboy::not_pressed(uint8_t buttons)
 uint8_t Arduboy::getInput()
 {
   // using ports here is ~100 bytes smaller than digitalRead()
+  /*
 #ifdef DEVKIT
   // down, left, up
   uint8_t buttons = ((~PINB) & B01110000);
@@ -1133,6 +1134,15 @@ uint8_t Arduboy::getInput()
   // A and B
   buttons = buttons | (((~PINF) & B11000000) >> 6);
 #endif
+*/
+  uint8_t buttons;
+  // down, left, up
+  // down, up, left right
+  buttons = ((~PINF) & B11110000);
+  // A (left)
+  buttons = buttons | (((~PINE) & B01000000) >> 3);
+  // B (right)
+  buttons = buttons | (((~PINB) & B00010000) >> 2);
 
   // b0dlu0rab - see button defines in Arduboy.h
   return buttons;
@@ -1455,6 +1465,8 @@ ISR(TIMER3_COMPA_vect) {  // TIMER 3
   ArduboyTunes::soundOutput();
 }
 
+
+///////////////
 Sprites::Sprites(Arduboy &a)
 {
   arduboy = &a;

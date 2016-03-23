@@ -31,9 +31,9 @@
 #define PIXEL_SAFE_MODE
 #define SAFE_MODE
 
-#define CS 6
+#define CS 12
 #define DC 4
-#define RST 12
+#define RST 6
 
 // compare Vcc to 1.1 bandgap
 #define ADC_VOLTAGE _BV(REFS0) | _BV(MUX4) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1)
@@ -42,21 +42,21 @@
 #define ADC_TEMP _BV(REFS0) | _BV(REFS1) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0)
 
 #define LEFT_BUTTON _BV(5)
-#define RIGHT_BUTTON _BV(2)
-#define UP_BUTTON _BV(4)
-#define DOWN_BUTTON _BV(6)
-#define A_BUTTON _BV(1)
-#define B_BUTTON _BV(0)
+#define RIGHT_BUTTON _BV(6)
+#define UP_BUTTON _BV(7)
+#define DOWN_BUTTON _BV(4)
+#define A_BUTTON _BV(3)
+#define B_BUTTON _BV(2)
 
-#define PIN_LEFT_BUTTON 9
-#define PIN_RIGHT_BUTTON 5
-#define PIN_UP_BUTTON 8
-#define PIN_DOWN_BUTTON 10
-#define PIN_A_BUTTON A0
-#define PIN_B_BUTTON A1
+#define PIN_LEFT_BUTTON A2
+#define PIN_RIGHT_BUTTON A1
+#define PIN_UP_BUTTON A0
+#define PIN_DOWN_BUTTON A3
+#define PIN_A_BUTTON 7
+#define PIN_B_BUTTON 8
 
-#define PIN_SPEAKER_1 A2
-#define PIN_SPEAKER_2 A3
+#define PIN_SPEAKER_1 5
+#define PIN_SPEAKER_2 13
 
 #define WIDTH 128
 #define HEIGHT 64

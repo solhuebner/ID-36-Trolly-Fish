@@ -1,7 +1,7 @@
 /*
   Trolly Fish: http://www.team-arg.org/fish-manual.html
 
-  Arduboy version 0.9:  http://www.team-arg.org/fish-downloads.html
+  Arduboy version 0.8:  http://www.team-arg.org/fish-downloads.html
 
   MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
@@ -86,8 +86,6 @@ void loop() {
     case STATE_MENU_MAIN:
       // show the splash art
       arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
-      drawBubbles(false);
-
       for (byte k = 0; k < 2; k++)
       {
         for (byte j = 0; j < 2; j++)
@@ -95,7 +93,6 @@ void loop() {
           sprites.drawPlusMask(73 + (j * 26), 2 + (k * 12), titleMenu_plus_mask, j + (2 * k));
         }
       }
-
       sprites.drawPlusMask(73 + (menuX * 26), 2 + (menuY * 12), bubbles_plus_mask, bubblesFrame);
       if (buttons.justPressed(RIGHT_BUTTON) && (!menuX)) menuX = !menuX;
       if (buttons.justPressed(LEFT_BUTTON) && (menuX)) menuX = !menuX;
@@ -104,7 +101,7 @@ void loop() {
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = 2 + menuX + (2 * menuY);
       break;
     case STATE_MENU_HELP: // QR code
-      //arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
+      arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
       if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
       break;
     case STATE_MENU_INFO: // infoscreen
@@ -118,7 +115,6 @@ void loop() {
       break;
     case STATE_MENU_SOUNDFX: // soundconfig screen
       arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
-      drawBubbles(false);
       sprites.drawPlusMask(88  , 2 , soundMenu_plus_mask, 0);
       for (byte j = 0; j < 2; j++)
       {

@@ -336,14 +336,8 @@ void spawnWave()
       jellyMax = 10;
     if (scorePlayer > EELSPAWN2)
       eelMax = 3;
-    /*if (scorePlayer > 500)
-      jellyMax = 3;
-      if (scorePlayer > 600)
-      jellyMax = 4;*/
-
     if (scorePlayer > FASTSPAWN)
       createEnemy(ENEMY_FAST, (random(3) * LANE_SEP) + LANEOFFSET); // Fillers, tighten gap, faster moving
-
     if (scorePlayer > EELSPAWN)
       createEnemy(ENEMY_EEL, (random(3) * LANE_SEP) + LANEOFFSET); // Three possible eel lanes, not distruptor, just limits v movement
     if (scorePlayer > EELSPAWN3)
@@ -401,9 +395,6 @@ boolean checkGameOver()
         Rect bubble = { .x = bubbleBullet.x, .y = bubbleBullet.y, .width = bubbleBullet.width, bubbleBullet.height };
         if (physics.collide(enemy, bubble))
         {
-          //enemyFish[i].resetPos();
-          //enemyFish[i].active = false;
-          //giveBonus(enemyFish[i].x, enemyFish[i].y, 2);
           switch (enemyFish[i].type)
           {
             case ENEMY_JELLY:
@@ -439,19 +430,13 @@ boolean checkGameOver()
           trollyFish.blink = 36;
           return false;
         }
-  
         arduboy.setFrameRate(60);
         fr = 60;
-        arduboy.tunes.tone(90, 300);
-        delay(400);
-        arduboy.tunes.tone(100, 100);
-        delay(300);
-        arduboy.tunes.tone(150, 100);
-        delay(300);
-        arduboy.tunes.tone(90, 100);
-        delay(300);
-        arduboy.tunes.tone(300, 200);
-        delay(400);
+        for (byte note = 0 ; note < 30; note++)
+        {
+          arduboy.tunes.tone(400 - (note * 10), 300);
+          delay(15);
+        }
         return true;
       }
     }
