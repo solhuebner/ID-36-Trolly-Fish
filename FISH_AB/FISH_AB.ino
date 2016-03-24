@@ -16,6 +16,7 @@
 
 #include <SPI.h>
 #include <EEPROM.h>
+#include "bitmaps.h"
 #include "Arglib.h"
 #include "physics.h"
 #include "menu.h"
@@ -23,7 +24,6 @@
 #include "enemies.h"
 #include "powerups.h"
 #include "stage.h"
-
 #include "inputs.h"
 
 //define menu states (on main menu)
@@ -43,7 +43,6 @@ Arduboy arduboy;
 SimpleButtons buttons (arduboy);
 Sprites sprites(arduboy);
 unsigned long scorePlayer;
-
 
 unsigned char gameState = STATE_MENU_MAIN;
 boolean soundYesNo;
