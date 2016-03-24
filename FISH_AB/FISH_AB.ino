@@ -1,7 +1,7 @@
 /*
   Trolly Fish: http://www.team-arg.org/fish-manual.html
 
-  Arduboy version 0.8:  http://www.team-arg.org/fish-downloads.html
+  Arduboy version 1.0:  http://www.team-arg.org/fish-downloads.html
 
   MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
