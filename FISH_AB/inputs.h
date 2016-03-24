@@ -17,8 +17,8 @@ extern void shootBubble();
 
 void checkInputs()
 {
-  if (buttons.pressed(UP_BUTTON) && (trollyFish.y > GAME_TOP)) trollyFish.y -= trollyFish.ySpeed;
-  if (buttons.pressed(DOWN_BUTTON) && (trollyFish.y < GAME_BOTTOM)) trollyFish.y += trollyFish.ySpeed;
+  if (buttons.pressed(UP_BUTTON) && (trollyFish.y > GAME_TOP)) trollyFish.y--;
+  if (buttons.pressed(DOWN_BUTTON) && (trollyFish.y < GAME_BOTTOM)) trollyFish.y++;
   if (buttons.justPressed(A_BUTTON)) gameState = STATE_GAME_PAUSE;
   if (buttons.justPressed(B_BUTTON))
   {

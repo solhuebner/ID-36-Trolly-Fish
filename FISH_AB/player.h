@@ -28,18 +28,17 @@ extern SimpleButtons buttons;
 extern byte getPowerup(byte);
 extern byte pu_timers[];
 
-int8_t shock_burst = 0;
+byte shock_burst = 0;
 byte trollyFrame = 0;
 struct Player
 {
   public:
     int y;
     byte width, height;
-    byte xSpeed, ySpeed;
     byte blink;
 };
 
-Player trollyFish = {.y = 32, .width = 2, .height = 4, .xSpeed = 1, .ySpeed = 1, .blink = 0 };
+Player trollyFish = {.y = 32, .width = 2, .height = 4, .blink = false };
 
 void drawTrollyFish()
 {

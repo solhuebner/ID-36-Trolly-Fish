@@ -49,7 +49,7 @@ byte powerups = 0x00;   //Active powerups
 byte pu_timers[4];
 byte pu_shocks = 0;
 byte pu_bubbles = 0;
-boolean powerUpSoundActive = false;
+
 
 
 // Set the value of a powerup flag
@@ -98,6 +98,7 @@ void shootBubble()
     bubbleBullet.active = true;
 
     --pu_bubbles;
+
     for (byte note = 0 ; note < 30; note++)
     {
       arduboy.tunes.tone(700 - (note * 10), 1);
@@ -141,16 +142,11 @@ void createPowerUp(byte type)
   powerUp.type = type;
 }
 
-void powerUpSound()
-{
-  powerUpSoundActive = false;
-}
-
 
 // Event when collision with powerup
 void triggerPowerUp(byte type)
 {
-  
+  arduboy.tunes.tone(1300, 150);
   switch (type)
   {
     case PU_SHOOTFISH:
@@ -177,9 +173,9 @@ void triggerPowerUp(byte type)
         }
       }
       break;
-    case PU_STOPFISH:
+    case PU_MAGNETFISH:
       setPowerup(type, PU_ON);
-      pu_timers[PUT_STOP] = 153;
+      pu_timers[PUT_MAGNET] = 255;
       break;
     case PU_POPFISH:
       for (byte i = 0; i < MAX_ENEMIES; ++i)
@@ -223,9 +219,9 @@ void triggerPowerUp(byte type)
         giveBonus(40, trollyFish.y, 2);
       }
       break;
-    case PU_MAGNETFISH:
+    case PU_STOPFISH:
       setPowerup(type, PU_ON);
-      pu_timers[PUT_MAGNET] = 255;
+      pu_timers[PUT_STOP] = 153;
       break;
   }
 }
@@ -274,7 +270,6 @@ void updatePowerUp()
     {
       // Trigger powerup effect
       triggerPowerUp(powerUp.type);
-      powerUpSoundActive = true;
       // Reset powerup
       powerUp.active = false;
       powerUp.x += 128;

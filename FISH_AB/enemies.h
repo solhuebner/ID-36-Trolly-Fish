@@ -49,7 +49,7 @@ byte eelMax = 1;
 struct Enemies
 {
   public:
-    int16_t  x;
+    int16_t x;
     int16_t y;
     byte width, height;
     int8_t xSpeed, ySpeed;
