@@ -38,8 +38,6 @@ extern unsigned long scorePlayer;
 extern byte eelMax;
 extern byte jellyMax;
 
-extern void setPowerup(byte index, byte state);
-extern byte getPowerup(byte index);
 extern void createPowerUp(byte type);
 
 extern byte pu_shocks;
@@ -87,7 +85,7 @@ void drawBubbles(boolean inGame)
 
 void spawnWave()
 {
-  if (getPowerup(PU_STOPFISH) == PU_OFF)
+  if (bitRead(powerups,PU_STOPFISH) == PU_OFF)
     spawnTimer--;
 
   if (spawnTimer <= 0)
@@ -155,7 +153,7 @@ void spawnWave()
 
 boolean checkGameOver()
 {
-  if (getPowerup(PU_PROTECTFISH)) // protected
+  if (bitRead(powerups,PU_PROTECTFISH)) // protected
     return false;
 
   Rect player = {.x = 20, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
@@ -201,10 +199,10 @@ boolean checkGameOver()
       if (physics.collide(enemy, player))
       {
         
-        if (getPowerup(PU_LIFEFISH)) // extra life
+        if (bitRead(powerups,PU_LIFEFISH)) // extra life
         {
           arduboy.tunes.tone(280, 50);
-          setPowerup(PU_LIFEFISH, PU_OFF);
+          bitClear(powerups,PU_LIFEFISH);
           enemyFish[i].x -= 32;
           enemyFish[i].resetPos();
           trollyFish.blink = 36;
@@ -277,17 +275,17 @@ void drawScore(byte scoreX, byte scoreY, byte fontType)
   }
 }
 
-void drawPowerUps()
+void drawHUDPowerUps()
 {
   byte offset = 0;
 
-  if (getPowerup(PU_STOPFISH))
+  if (bitRead(powerups,PU_STOPFISH))
   {
     sprites.drawPlusMask(1, 1, hudAssets_plus_mask, 0);
     offset += 8;
   }
 
-  if (getPowerup(PU_SHOOTFISH) && pu_bubbles > 0)
+  if (bitRead(powerups,PU_SHOOTFISH) && pu_bubbles > 0)
   {
     sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 1);
     offset += 8;
@@ -295,19 +293,19 @@ void drawPowerUps()
     offset += 8;
   }
 
-  if (getPowerup(PU_PROTECTFISH))
+  if (bitRead(powerups,PU_PROTECTFISH))
   {
     sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 2);
     offset += 8;
   }
 
-  if (getPowerup(PU_LIFEFISH))
+  if (bitRead(powerups,PU_LIFEFISH))
   {
     sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 3);
     offset += 8;
   }
 
-  if (getPowerup(PU_SHOCKFISH) && pu_shocks > 0)
+  if (bitRead(powerups,PU_SHOCKFISH) && pu_shocks > 0)
   {
     sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 4);
     offset += 8;
@@ -315,7 +313,7 @@ void drawPowerUps()
     offset += 8;
   }
 
-  if (getPowerup(PU_MAGNETFISH))
+  if (bitRead(powerups,PU_MAGNETFISH))
   {
     sprites.drawPlusMask(1 + offset, 1, hudAssets_plus_mask, 5);
     offset += 8;

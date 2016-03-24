@@ -32,7 +32,6 @@
 #define PUT_STOP                   0
 
 extern Arduboy arduboy;
-extern byte getPowerup(byte);
 extern const unsigned char starFish_plus_mask[];
 extern byte pu_timers[];
 extern unsigned long scorePlayer;
@@ -126,7 +125,7 @@ void createEnemy(byte type, byte y)
 
 void updateEnemies()
 {
-  if (getPowerup(PU_STOPFISH))  // enemies paused
+  if (bitRead(powerups,PU_STOPFISH))  // enemies paused
     return;
 
   for (byte i = 0; i < MAX_ENEMIES; i++)
@@ -255,9 +254,8 @@ void updateEnemies()
           break;
 
         case ENEMY_STAR:
-          if (getPowerup(PU_MAGNETFISH))
+          if (bitRead(powerups,PU_MAGNETFISH))
           {
-            //if (arduboy.everyXFrames(3))
             {
               if (enemyFish[i].y < trollyFish.y) enemyFish[i].y++;
               if (enemyFish[i].y > trollyFish.y) enemyFish[i].y--;
@@ -282,7 +280,7 @@ void updateEnemies()
 void drawEnemies()
 {
   if (arduboy.everyXFrames(6)) fishFrame++;
-  if (fishFrame > 3 || getPowerup(PU_STOPFISH)) fishFrame = 0;
+  if (fishFrame > 3 || bitRead(powerups,PU_STOPFISH)) fishFrame = 0;
   if (pu_timers[PUT_STOP] > 40 || pu_timers[PUT_STOP] % 8 < 6)
   {
     for (byte i = 0; i < MAX_ENEMIES; i++)

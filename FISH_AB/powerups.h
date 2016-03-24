@@ -51,19 +51,6 @@ byte pu_shocks = 0;
 byte pu_bubbles = 0;
 
 
-
-// Set the value of a powerup flag
-void setPowerup(byte index, byte state)
-{
-  powerups = (state) ? powerups | _BV(index) : powerups & ~_BV(index);
-}
-
-// Get the value of a powerup flag
-byte getPowerup(byte index)
-{
-  return (powerups & _BV(index));
-}
-
 struct PowerUp
 {
   public:
@@ -150,9 +137,10 @@ void triggerPowerUp(byte type)
   switch (type)
   {
     case PU_SHOOTFISH:
-      if (pu_shocks == 0) {
+      if (pu_shocks == 0)
+      {
         pu_bubbles = PUC_SHOOT;
-        setPowerup(type, PU_ON);
+        bitSet(powerups,PU_SHOOTFISH);
       }
       else {
         giveBonus(40, trollyFish.y, 2);
@@ -174,7 +162,7 @@ void triggerPowerUp(byte type)
       }
       break;
     case PU_MAGNETFISH:
-      setPowerup(type, PU_ON);
+      bitSet(powerups,PU_MAGNETFISH);
       pu_timers[PUT_MAGNET] = 255;
       break;
     case PU_POPFISH:
@@ -200,18 +188,17 @@ void triggerPowerUp(byte type)
       }
       break;
     case PU_PROTECTFISH:
-      setPowerup(type, PU_ON);
+      bitSet(powerups,PU_PROTECTFISH);
       pu_timers[PUT_PROTECT] = 255;
       break;
     case PU_LIFEFISH:
-      if (getPowerup(PU_LIFEFISH))
-        giveBonus(20, trollyFish.y, 5);
-      setPowerup(type, PU_ON);
+      if (bitRead(powerups,PU_LIFEFISH)) giveBonus(20, trollyFish.y, 5);
+      bitSet(powerups,PU_LIFEFISH);
       break;
     case PU_SHOCKFISH:
       if (pu_bubbles == 0)
       {
-        setPowerup(type, PU_ON);
+        bitSet(powerups,PU_SHOCKFISH);
         pu_shocks = PUC_SHOCK;
       }
       else
@@ -220,7 +207,7 @@ void triggerPowerUp(byte type)
       }
       break;
     case PU_STOPFISH:
-      setPowerup(type, PU_ON);
+      bitSet(powerups,PU_STOPFISH);
       pu_timers[PUT_STOP] = 153;
       break;
   }
@@ -240,13 +227,17 @@ void updatePowerUp()
         {
           switch (i)
           {
-            case PUT_STOP: setPowerup(PU_STOPFISH, PU_OFF);
+            case PUT_STOP:
+              bitClear(powerups,PU_STOPFISH);
               break;
-            case PUT_SHOCK: setPowerup(PU_SHOCKFISH, PU_OFF);
+            case PUT_SHOCK:
+              bitClear(powerups,PU_SHOCKFISH);
               break;
-            case PUT_PROTECT: setPowerup(PU_PROTECTFISH, PU_OFF);
+            case PUT_PROTECT:
+              bitClear(powerups,PU_PROTECTFISH);
               break;
-            case PUT_MAGNET: setPowerup(PU_MAGNETFISH, PU_OFF);
+            case PUT_MAGNET:
+              bitClear(powerups,PU_MAGNETFISH);
               break;
           }
         }
@@ -428,7 +419,7 @@ void updateStarFish()
   {
     if (starFish[i].active)
     {
-      if (getPowerup(PU_MAGNETFISH) || i >= MAX_STARS)
+      if (bitRead(powerups,PU_MAGNETFISH) || i >= MAX_STARS)
       {
         if (arduboy.everyXFrames(2) && abs(20 - starFish[i].x) < 32)
         {

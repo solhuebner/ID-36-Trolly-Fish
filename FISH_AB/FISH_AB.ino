@@ -176,7 +176,7 @@ void loop() {
       drawScore(86, 0, 0);
       drawWeed();
       drawBubbles(true);
-      drawPowerUps();
+      drawHUDPowerUps();
 
       if (checkGameOver())gameState = STATE_GAME_OVER;
       break;

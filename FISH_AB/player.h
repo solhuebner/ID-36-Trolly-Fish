@@ -25,8 +25,8 @@ extern Arduboy arduboy;
 extern Sprites sprites;
 extern SimpleButtons buttons;
 
-extern byte getPowerup(byte);
 extern byte pu_timers[];
+extern byte powerups;
 
 byte shock_burst = 0;
 byte trollyFrame = 0;
@@ -61,7 +61,7 @@ void drawTrollyFish()
   sprites.drawPlusMask(14, trollyFish.y - 8, Trolly_plus_mask, trollyFrame);
   
   // Protect Powerup
-  if (getPowerup(PU_PROTECTFISH) && (pu_timers[PUT_PROTECT] > 60 || pu_timers[PUT_PROTECT] % 2 == 0))
+  if (bitRead(powerups,PU_PROTECTFISH) && (pu_timers[PUT_PROTECT] > 60 || pu_timers[PUT_PROTECT] % 2 == 0))
     sprites.drawPlusMask(10, trollyFish.y - 8 -4, bigBubble_plus_mask, 0);
 
   // Shock Powerup
