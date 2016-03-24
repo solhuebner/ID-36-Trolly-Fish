@@ -3,55 +3,54 @@
 
 #include <Arduino.h>
 
-#define MAX_ENEMIES             9
+#define MAX_STARS                  8   // Maximum regular stars
+#define MAX_ENEMIES                9
+#define TOTAL_STARS                MAX_STARS + (MAX_ENEMIES * 3)  // Total initialized stars, including enemies turned
+#define TOTAL_TYPES                4
+#define STAR_HEIGHT                10
+
+#define GAME_LEFT                  3
+
+// Powerups
+#define PU_SHOOTFISH               0
+#define PU_TURNFISH                1
+#define PU_MAGNETFISH              2
+#define PU_POPFISH                 3
+#define PU_PROTECTFISH             4
+#define PU_LIFEFISH                5
+#define PU_SHOCKFISH               6
+#define PU_STOPFISH                7
+
+// Powerup Timers
+#define PUT_STOP                   0
+#define PUT_PROTECT                1
+#define PUT_SHOCK                  2
+#define PUT_MAGNET                 3
+
+// Powerup Charges
+#define PUC_SHOOT                  9
+#define PUC_SHOCK                  8
+
+#define MAX_POWERUPS               1
+#define PU_ON                      1
+#define PU_OFF                     0
 
 extern Arduboy arduboy;
 extern unsigned long scorePlayer;
 extern Physics physics;
-//extern Player trollyFish;
 extern void giveBonus(int8_t, int8_t, byte);
-
-#define MAX_STARS     8   // Maximum regular stars
-#define TOTAL_STARS   MAX_STARS + (MAX_ENEMIES * 3)  // Total initialized stars, including enemies turned
-#define TOTAL_TYPES   4
-#define STAR_HEIGHT   10
-
-#define GAME_LEFT       3
-
-// Powerups
-#define PU_TURNFISH     0
-#define PU_STOPFISH     1
-#define PU_POPFISH      2
-#define PU_SHOOTFISH    3
-#define PU_PROTECTFISH  4
-#define PU_LIFEFISH     5
-#define PU_SHOCKFISH    6
-#define PU_MAGNETFISH   7
-
-// Powerup Timers
-#define PUT_STOP    0
-#define PUT_PROTECT 1
-#define PUT_SHOCK   2
-#define PUT_MAGNET  3
-
-// Powerup Charges
-#define PUC_SHOOT   9
-#define PUC_SHOCK   8
-
-#define MAX_POWERUPS    1
-#define PU_ON           1
-#define PU_OFF          0
 
 
 // Function prototypes
 void createStar(byte, byte);
-
 
 // Total of 8 powerups, 1 byte of flags
 byte powerups = 0x00;   //Active powerups
 byte pu_timers[4];
 byte pu_shocks = 0;
 byte pu_bubbles = 0;
+boolean powerUpSoundActive = false;
+
 
 // Set the value of a powerup flag
 void setPowerup(byte index, byte state)
@@ -142,12 +141,19 @@ void createPowerUp(byte type)
   powerUp.type = type;
 }
 
+void powerUpSound()
+{
+  powerUpSoundActive = false;
+}
+
+
 // Event when collision with powerup
 void triggerPowerUp(byte type)
 {
+  
   switch (type)
   {
-    case PU_SHOOTFISH: arduboy.tunes.tone(300, 50);
+    case PU_SHOOTFISH:
       if (pu_shocks == 0) {
         pu_bubbles = PUC_SHOOT;
         setPowerup(type, PU_ON);
@@ -156,7 +162,7 @@ void triggerPowerUp(byte type)
         giveBonus(40, trollyFish.y, 2);
       }
       break;
-    case PU_TURNFISH: arduboy.tunes.tone(300, 50);
+    case PU_TURNFISH:
       for (byte i = 0; i < MAX_ENEMIES; ++i)
       {
         if (enemyFish[i].active && enemyFish[i].x < 135)
@@ -171,11 +177,11 @@ void triggerPowerUp(byte type)
         }
       }
       break;
-    case PU_STOPFISH: arduboy.tunes.tone(300, 50);
+    case PU_STOPFISH:
       setPowerup(type, PU_ON);
       pu_timers[PUT_STOP] = 153;
       break;
-    case PU_POPFISH: arduboy.tunes.tone(300, 50);
+    case PU_POPFISH:
       for (byte i = 0; i < MAX_ENEMIES; ++i)
       {
         if (enemyFish[i].active && enemyFish[i].x < 135)
@@ -197,26 +203,27 @@ void triggerPowerUp(byte type)
         }
       }
       break;
-    case PU_PROTECTFISH: arduboy.tunes.tone(350, 50);
+    case PU_PROTECTFISH:
       setPowerup(type, PU_ON);
       pu_timers[PUT_PROTECT] = 255;
       break;
-    case PU_LIFEFISH: arduboy.tunes.tone(280, 50);
+    case PU_LIFEFISH:
       if (getPowerup(PU_LIFEFISH))
         giveBonus(20, trollyFish.y, 5);
       setPowerup(type, PU_ON);
       break;
-    case PU_SHOCKFISH: arduboy.tunes.tone(250, 50);
-      if (pu_bubbles == 0) {
+    case PU_SHOCKFISH:
+      if (pu_bubbles == 0)
+      {
         setPowerup(type, PU_ON);
-        //pu_timers[PUT_SHOCK] = 255;
         pu_shocks = PUC_SHOCK;
       }
-      else {
+      else
+      {
         giveBonus(40, trollyFish.y, 2);
       }
       break;
-    case PU_MAGNETFISH: arduboy.tunes.tone(380, 50);
+    case PU_MAGNETFISH:
       setPowerup(type, PU_ON);
       pu_timers[PUT_MAGNET] = 255;
       break;
@@ -267,7 +274,7 @@ void updatePowerUp()
     {
       // Trigger powerup effect
       triggerPowerUp(powerUp.type);
-
+      powerUpSoundActive = true;
       // Reset powerup
       powerUp.active = false;
       powerUp.x += 128;

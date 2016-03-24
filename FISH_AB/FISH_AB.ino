@@ -14,12 +14,9 @@
 //determine the game
 #define GAME_ID 36
 
-#include <SPI.h>
-#include <EEPROM.h>
-#include "bitmaps.h"
 #include "Arglib.h"
+#include "bitmaps.h"
 #include "physics.h"
-#include "menu.h"
 #include "player.h"
 #include "enemies.h"
 #include "powerups.h"
@@ -47,6 +44,7 @@ unsigned long scorePlayer;
 unsigned char gameState = STATE_MENU_MAIN;
 boolean soundYesNo;
 byte counter = 0;
+byte pu_current = 0;
 byte bubblesFrame = 0;
 boolean menuX = true;
 boolean menuY = false;
@@ -132,7 +130,6 @@ void loop() {
       break;
     case STATE_MENU_PLAY:
       scorePlayer = 0;
-      //starFish.resetPos();
       pu_shocks = 0;
       pu_bubbles = 0;
       fr = 60;
@@ -140,6 +137,7 @@ void loop() {
       initStarFish(0);
       initBonuses();
       powerups = 0x00;   //No starting active powerups
+      pu_current = 0;
       pu_timers[PUT_STOP] = 0;        // Timer for PU_STOPFISH
       pu_timers[PUT_PROTECT] = 0;     // Timer for PU_PROTECTFISH
       pu_timers[PUT_SHOCK] = 0;       // Timer for PU_SHOCKFISH

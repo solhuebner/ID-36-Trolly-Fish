@@ -3,33 +3,33 @@
 
 #include <Arduino.h>
 
-#define MAX_ENEMIES             9
-#define GAME_LEFT               3
+#define MAX_ENEMIES                9
+#define GAME_LEFT                  3
+#define GAME_TOP                   3
+#define GAME_BOTTOM                58
 
-#define GAME_TOP                3
-#define GAME_BOTTOM             58
+#define ENEMY_BAD                  0
+#define ENEMY_JELLY                1
+#define ENEMY_EEL                  2
+#define ENEMY_STAR                 3 // enemy turned into starfish
+#define ENEMY_BUBBLE               4 // enemy turned into bubbles
+#define ENEMY_FAST                 5 // fast fish looks like bad fish but is faster
+#define ENEMY_DEAD                 6 // shocked fish floats to top
 
-#define ENEMY_BAD               0
-#define ENEMY_JELLY             1
-#define ENEMY_EEL               2
-#define ENEMY_STAR              3 // enemy turned into starfish
-#define ENEMY_BUBBLE            4 // enemy turned into bubbles
-#define ENEMY_FAST              5 // fast fish looks like bad fish but is faster
-#define ENEMY_DEAD              6 // shocked fish floats to top
+#define BURST_LENGTH               15
+#define BURST_WAIT                 20
 
-#define BURST_LENGTH            15
-#define BURST_WAIT              20
+// Powerups
+#define PU_SHOOTFISH               0
+#define PU_TURNFISH                1
+#define PU_MAGNETFISH              2
+#define PU_POPFISH                 3
+#define PU_PROTECTFISH             4
+#define PU_LIFEFISH                5
+#define PU_SHOCKFISH               6
+#define PU_STOPFISH                7
 
-#define PU_TURNFISH     0
-#define PU_STOPFISH     1
-#define PU_SHOOTFISH    2
-#define PU_POPFISH      3
-#define PU_PROTECTFISH  4
-#define PU_LIFEFISH     5
-#define PU_SHOCKFISH    6
-#define PU_MAGNETFISH   7
-
-#define PUT_STOP    0
+#define PUT_STOP                   0
 
 extern Arduboy arduboy;
 extern byte getPowerup(byte);

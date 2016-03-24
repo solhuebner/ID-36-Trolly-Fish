@@ -3,6 +3,23 @@
 
 #include <Arduino.h>
 
+// Powerup Timers
+#define PUT_STOP                   0
+#define PUT_PROTECT                1
+#define PUT_SHOCK                  2
+#define PUT_MAGNET                 3
+
+// Powerups
+#define PU_SHOOTFISH               0
+#define PU_TURNFISH                1
+#define PU_MAGNETFISH              2
+#define PU_POPFISH                 3
+#define PU_PROTECTFISH             4
+#define PU_LIFEFISH                5
+#define PU_SHOCKFISH               6
+#define PU_STOPFISH                7
+
+#define SHOCK_LENGTH               8
 
 extern Arduboy arduboy;
 extern Sprites sprites;
@@ -11,26 +28,8 @@ extern SimpleButtons buttons;
 extern byte getPowerup(byte);
 extern byte pu_timers[];
 
-#define PUT_STOP    0
-#define PUT_PROTECT 1
-#define PUT_SHOCK   2
-#define PUT_MAGNET  3
-
-#define PU_SHOOTFISH    0
-#define PU_TURNFISH     1
-#define PU_POPFISH      2
-#define PU_STOPFISH     3
-#define PU_PROTECTFISH  4
-#define PU_LIFEFISH     5
-#define PU_SHOCKFISH    6
-#define PU_MAGNETFISH   7
-
-#define SHOCK_LENGTH    8
-
 int8_t shock_burst = 0;
-
 byte trollyFrame = 0;
-
 struct Player
 {
   public:
