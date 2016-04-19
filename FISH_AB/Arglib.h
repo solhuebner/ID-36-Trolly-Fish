@@ -87,7 +87,7 @@ public:
   void setup();
   void on();
   void off();
-  void save_on_off();
+  void saveOnOff();
   bool enabled();
   void tone(uint8_t channel, unsigned int frequency, unsigned long duration);
 

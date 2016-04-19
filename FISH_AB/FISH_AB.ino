@@ -122,7 +122,7 @@ void loop() {
       if (buttons.justPressed(LEFT_BUTTON)) soundYesNo = false;
       if (buttons.justPressed(A_BUTTON | B_BUTTON))
       {
-        arduboy.audio.save_on_off();
+        arduboy.audio.saveOnOff();
         gameState = STATE_MENU_MAIN;
       }
       if (soundYesNo == true) arduboy.audio.on();
