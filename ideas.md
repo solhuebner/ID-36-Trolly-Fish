@@ -1,4 +1,4 @@
-µ## Trolly Fish
+## Trolly Fish
 Trolly fish is like an endless runner, where you need to dodge the enemies, collect stars and use powerups to progress as far as you can.
 
 We need a good balance between stars to catch and enemies.
