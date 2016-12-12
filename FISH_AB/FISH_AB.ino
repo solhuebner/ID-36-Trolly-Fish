@@ -1,7 +1,7 @@
 /*
   Trolly Fish: http://www.team-arg.org/fish-manual.html
 
-  Arduboy version 1.0:  http://www.team-arg.org/fish-downloads.html
+  Arduboy version 1.1:  http://www.team-arg.org/fish-downloads.html
 
   MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
@@ -14,9 +14,14 @@
 //determine the game
 #define GAME_ID 36
 
-#include "Arglib.h"
+#include <Arduboy2.h>
+#include <ArduboyTones.h>
+
+Arduboy2Base arduboy;
+Sprites sprites;
+ArduboyTones sound(arduboy.audio.enabled);
+
 #include "bitmaps.h"
-#include "physics.h"
 #include "player.h"
 #include "enemies.h"
 #include "powerups.h"
@@ -36,13 +41,9 @@
 #define STATE_GAME_PAUSE         9
 #define STATE_GAME_OVER          10
 
-Arduboy arduboy;
-SimpleButtons buttons (arduboy);
-Sprites sprites(arduboy);
 unsigned long scorePlayer;
 
 unsigned char gameState = STATE_MENU_MAIN;
-boolean soundYesNo;
 byte counter = 0;
 byte pu_current = 0;
 byte bubblesFrame = 0;
@@ -51,21 +52,18 @@ boolean menuY = false;
 
 void setup()
 {
-  arduboy.start();
+  arduboy.begin();
   arduboy.setFrameRate(60);
-  if (EEPROM.read(EEPROM_AUDIO_ON_OFF)) soundYesNo = true;
   arduboy.initRandomSeed();
   gameState = STATE_MENU_INTRO;
 }
 
 void loop() {
   if (!(arduboy.nextFrame())) return;
-  buttons.poll();
-  if (soundYesNo == true) arduboy.audio.on();
-  else arduboy.audio.off();
+  arduboy.pollButtons();
   if (arduboy.everyXFrames(6))bubblesFrame++;
   if (bubblesFrame > 12) bubblesFrame = 0;
-  arduboy.clearDisplay();
+  arduboy.clear();
   switch (gameState)
   {
     case STATE_MENU_INTRO:
@@ -91,15 +89,15 @@ void loop() {
         }
       }
       sprites.drawPlusMask(73 + (menuX * 26), 2 + (menuY * 12), bubbles_plus_mask, bubblesFrame);
-      if (buttons.justPressed(RIGHT_BUTTON) && (!menuX)) menuX = !menuX;
-      if (buttons.justPressed(LEFT_BUTTON) && (menuX)) menuX = !menuX;
-      if (buttons.justPressed(DOWN_BUTTON) && (!menuY)) menuY = !menuY;
-      if (buttons.justPressed(UP_BUTTON) && (menuY)) menuY = !menuY;
-      if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = 2 + menuX + (2 * menuY);
+      if (arduboy.justPressed(RIGHT_BUTTON) && (!menuX)) menuX = !menuX;
+      if (arduboy.justPressed(LEFT_BUTTON) && (menuX)) menuX = !menuX;
+      if (arduboy.justPressed(DOWN_BUTTON) && (!menuY)) menuY = !menuY;
+      if (arduboy.justPressed(UP_BUTTON) && (menuY)) menuY = !menuY;
+      if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = 2 + menuX + (2 * menuY);
       break;
     case STATE_MENU_HELP: // QR code
       arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
-      if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
+      if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
       break;
     case STATE_MENU_INFO: // infoscreen
       arduboy.drawBitmap(14 , 8 , trollyFishTitle, 100 , 16, WHITE);
@@ -108,7 +106,7 @@ void loop() {
       arduboy.drawBitmap(30 , 50 , madeBy03, 79 , 8, WHITE);
       drawWeed();
       drawBubbles(false);
-      if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
+      if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
       break;
     case STATE_MENU_SOUNDFX: // soundconfig screen
       arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
@@ -117,16 +115,14 @@ void loop() {
       {
         sprites.drawPlusMask(78 + (24 * j) , 14 , soundMenu_plus_mask, 1 + j);
       }
-      sprites.drawPlusMask(76 + (soundYesNo * 22) , 14 , bubbles_plus_mask, bubblesFrame);
-      if (buttons.justPressed(RIGHT_BUTTON)) soundYesNo = true;
-      if (buttons.justPressed(LEFT_BUTTON)) soundYesNo = false;
-      if (buttons.justPressed(A_BUTTON | B_BUTTON))
+      sprites.drawPlusMask(76 + (arduboy.audio.enabled() * 22) , 14 , bubbles_plus_mask, bubblesFrame);
+      if (arduboy.justPressed(RIGHT_BUTTON)) arduboy.audio.on();
+      if (arduboy.justPressed(LEFT_BUTTON)) arduboy.audio.off();
+      if (arduboy.justPressed(A_BUTTON | B_BUTTON))
       {
         arduboy.audio.saveOnOff();
         gameState = STATE_MENU_MAIN;
       }
-      if (soundYesNo == true) arduboy.audio.on();
-      else arduboy.audio.off();
       break;
     case STATE_MENU_PLAY:
       scorePlayer = 0;
@@ -184,7 +180,7 @@ void loop() {
       arduboy.drawBitmap(26, 8, gameOver, 84, 16, WHITE);
       drawWeed();
       drawScore(32, 36, 1);
-      if (buttons.justPressed(A_BUTTON | B_BUTTON))
+      if (arduboy.justPressed(A_BUTTON | B_BUTTON))
       {
         gameState = STATE_MENU_MAIN;
       }
@@ -193,7 +189,7 @@ void loop() {
       arduboy.drawBitmap(40, 20, pause, 48, 16, WHITE);
       drawWeed();
       drawBubbles(false);
-      if (buttons.justPressed(A_BUTTON))
+      if (arduboy.justPressed(A_BUTTON))
       {
         gameState = STATE_GAME_PLAYING;
       }
