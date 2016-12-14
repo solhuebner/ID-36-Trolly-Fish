@@ -1,6 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <Arduino.h>
+#include "globals.h"
+
 // Powerup Timers
 #define PUT_STOP                   0
 #define PUT_PROTECT                1

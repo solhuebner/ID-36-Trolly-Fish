@@ -1,6 +1,9 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
 
+#include <Arduino.h>
+#include "globals.h"
+
 #define MAX_ENEMIES                9
 #define GAME_LEFT                  3
 #define GAME_TOP                   3

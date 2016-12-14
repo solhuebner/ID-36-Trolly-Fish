@@ -1,6 +1,9 @@
 #ifndef STAGE_H
 #define STAGE_H
 
+#include <Arduino.h>
+#include "globals.h"
+
 #define MAX_ENEMIES                9
 #define SPAWN_DELAY                160
 #define SCORE_SMALL_FONT           0

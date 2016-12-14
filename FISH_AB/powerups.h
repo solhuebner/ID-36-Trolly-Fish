@@ -1,6 +1,9 @@
 #ifndef POWERUPS_H
 #define POWERUPS_H
 
+#include <Arduino.h>
+#include "globals.h"
+
 #define MAX_STARS                  8   // Maximum regular stars
 #define MAX_ENEMIES                9
 #define TOTAL_STARS                MAX_STARS + (MAX_ENEMIES * 3)  // Total initialized stars, including enemies turned
