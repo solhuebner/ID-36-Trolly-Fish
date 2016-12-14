@@ -1,8 +1,6 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
 
-#include <Arduino.h>
-
 #define MAX_ENEMIES                9
 #define GAME_LEFT                  3
 #define GAME_TOP                   3
@@ -31,7 +29,6 @@
 
 #define PUT_STOP                   0
 
-extern Arduboy arduboy;
 extern const unsigned char starFish_plus_mask[];
 extern byte pu_timers[];
 extern unsigned long scorePlayer;

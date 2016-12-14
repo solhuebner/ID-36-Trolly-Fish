@@ -1,9 +1,6 @@
 #ifndef STAGE_H
 #define STAGE_H
 
-#include <Arduino.h>
-#include "enemies.h"
-
 #define MAX_ENEMIES                9
 #define SPAWN_DELAY                160
 #define SCORE_SMALL_FONT           0
@@ -33,7 +30,6 @@
 
 #define LANE_SEP                   25
 
-extern Physics physics;
 extern unsigned long scorePlayer;
 extern byte eelMax;
 extern byte jellyMax;
@@ -171,7 +167,7 @@ boolean checkGameOver()
       if (bubbleBullet.active)
       {
         Rect bubble = { .x = bubbleBullet.x, .y = bubbleBullet.y, .width = bubbleBullet.width, bubbleBullet.height };
-        if (physics.collide(enemy, bubble))
+        if (arduboy.collide(enemy, bubble))
         {
           switch (enemyFish[i].type)
           {
@@ -189,19 +185,19 @@ boolean checkGameOver()
             default:
               giveBonus(enemyFish[i].x, enemyFish[i].y + 8, 1);
           }
-          arduboy.tunes.tone(200, 50);
+          sound.tone(200, 50);
           enemyFish[i].type = ENEMY_BUBBLE;
             
           bubbleBullet.active = false;
         }
       }
         
-      if (physics.collide(enemy, player))
+      if (arduboy.collide(enemy, player))
       {
         
         if (bitRead(powerups,PU_LIFEFISH)) // extra life
         {
-          arduboy.tunes.tone(280, 50);
+          sound.tone(280, 50);
           bitClear(powerups,PU_LIFEFISH);
           enemyFish[i].x -= 32;
           enemyFish[i].resetPos();
@@ -212,7 +208,7 @@ boolean checkGameOver()
         fr = 60;
         for (byte note = 0 ; note < 30; note++)
         {
-          arduboy.tunes.tone(400 - (note * 10), 300);
+          sound.tone(400 - (note * 10), 300);
           delay(15);
         }
         return true;

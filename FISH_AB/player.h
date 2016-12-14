@@ -1,8 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <Arduino.h>
-
 // Powerup Timers
 #define PUT_STOP                   0
 #define PUT_PROTECT                1
@@ -20,10 +18,6 @@
 #define PU_STOPFISH                7
 
 #define SHOCK_LENGTH               8
-
-extern Arduboy arduboy;
-extern Sprites sprites;
-extern SimpleButtons buttons;
 
 extern byte pu_timers[];
 extern byte powerups;
@@ -44,7 +38,7 @@ void drawTrollyFish()
 {
   if (arduboy.everyXFrames(3) && shock_burst > 0) // Manage shock bursting
     {
-      arduboy.tunes.tone(900, 25);
+      sound.tone(900, 25);
       --shock_burst;
     }
 
@@ -52,7 +46,7 @@ void drawTrollyFish()
     --trollyFish.blink;
     
   byte faster = 1;
-  if (buttons.pressed(UP_BUTTON) || buttons.pressed(DOWN_BUTTON)) faster = 2;
+  if (arduboy.pressed(UP_BUTTON) || arduboy.pressed(DOWN_BUTTON)) faster = 2;
   
   if (arduboy.everyXFrames(6 / faster)) trollyFrame++;
 

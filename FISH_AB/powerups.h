@@ -1,8 +1,6 @@
 #ifndef POWERUPS_H
 #define POWERUPS_H
 
-#include <Arduino.h>
-
 #define MAX_STARS                  8   // Maximum regular stars
 #define MAX_ENEMIES                9
 #define TOTAL_STARS                MAX_STARS + (MAX_ENEMIES * 3)  // Total initialized stars, including enemies turned
@@ -35,9 +33,7 @@
 #define PU_ON                      1
 #define PU_OFF                     0
 
-extern Arduboy arduboy;
 extern unsigned long scorePlayer;
-extern Physics physics;
 extern void giveBonus(int8_t, int8_t, byte);
 
 
@@ -88,7 +84,7 @@ void shootBubble()
 
     for (byte note = 0 ; note < 30; note++)
     {
-      arduboy.tunes.tone(700 - (note * 10), 1);
+      sound.tone(700 - (note * 10), 1);
       delay(1);
     }
   }
@@ -133,7 +129,7 @@ void createPowerUp(byte type)
 // Event when collision with powerup
 void triggerPowerUp(byte type)
 {
-  arduboy.tunes.tone(1300, 150);
+  sound.tone(1300, 150);
   switch (type)
   {
     case PU_SHOOTFISH:
@@ -257,7 +253,7 @@ void updatePowerUp()
 
     Rect powerupRect = {.x = powerUp.x, .y = powerUp.y, .width = powerUp.width, powerUp.height};
 
-    if (physics.collide(powerupRect, playerRect))
+    if (arduboy.collide(powerupRect, playerRect))
     {
       // Trigger powerup effect
       triggerPowerUp(powerUp.type);
@@ -457,9 +453,9 @@ void checkIfScored() {
   {
     Rect starFishPoint = {.x = starFish[i].x, .y = starFish[i].y, .width = starFish[i].width, starFish[i].height};
 
-    if (physics.collide(starFishPoint, playerRect))
+    if (arduboy.collide(starFishPoint, playerRect))
     {
-      arduboy.tunes.tone(300, 40);
+      sound.tone(300, 40);
       scorePlayer++;
       starFish[i].resetPos();
       ++streak;
